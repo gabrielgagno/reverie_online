@@ -10,7 +10,7 @@ class Task extends Job{
     boolean hardDeadline
 
     static hasMany = [subTaskList : SubTask]
-
+    static belongsTo = [owner:User]
     static constraints = {
     }
 

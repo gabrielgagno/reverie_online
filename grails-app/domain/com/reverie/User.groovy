@@ -8,7 +8,7 @@ class User {
     String firstName
     String lastName
 
-    static hasMany = [schedules:ScheduleSet]
+    static hasMany = [habitQueue:Habit, priorityQueue:Task]
     static constraints = {
         email unique: true
         username unique: true
