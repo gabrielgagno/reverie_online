@@ -19,15 +19,7 @@ class JobsController {
     }
 
     def addTask(String jobName, String jobNotes, String deadline, String deadlineTime, float completionTime, float minOperationDuration){
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm")
-        def t = new Task()
-        t.owner = sessionService.getCurrentUser((String) session.getAttribute("id"))
-        t.jobName = jobName
-        t.jobNotes = jobNotes
-        t.deadline = fmt.parseLocalDateTime(deadline + " " + deadlineTime)
-        t.completionTime = completionTime
-        t.minOperationDuration = minOperationDuration
-        t.save()
+        utilityService.addTask(jobName, jobNotes, deadline, deadlineTime, completionTime, minOperationDuration)
         //TODO redraw
     }
 
