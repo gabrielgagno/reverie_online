@@ -18,22 +18,19 @@
             <g:form controller="jobs" action="addTask" method="POST">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <g:field type="text" name="jobName" required="required" placeholder="Job Name" class="form-control" />
+                        <g:field type="text" name="jobName" required="required" placeholder="Job Name" class="form-control"/>
                     </div>
                     <div class="form-group">
-                        <g:textArea name="jobNotes" placeholder="Job Notes" />
+                        <g:textArea name="jobNotes" placeholder="Job Notes" class="form-control" />
                     </div>
-                    <div class="form-group">
-                        <g:field type="date" name="deadline" required="required" placeholder="Deadline" />
-                        <g:field type="text" name="deadlineTime" required="required" placeholder="Deadline Time (HH:MM) 24 Hr." />
-                    </div>
+                        <input id="datetimepicker" type="text" >
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <g:field type="text" name="completionTime" required="required" placeholder="Est. Completion Time" />
+                        <g:field type="text" name="completionTime" required="required" placeholder="Est. Completion Time"  class="form-control" />
                     </div>
                     <div class="form-group">
-                        <g:field type="text" name="minOperationDuration" required="required" placeholder="Min. Subtask Duration" />
+                        <g:field type="text" name="minOperationDuration" required="required" placeholder="Min. Subtask Duration" class="form-control" />
                     </div>
                     <div class="form-group">
                         <g:submitButton name="save" value="Save" class="btn btn-primary"/>
@@ -43,5 +40,14 @@
             </g:form>
         </div>
     </div>
+<link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'jquery.datetimepicker.css')}" />
+<g:javascript src="jquery.js" />
+<g:javascript src="jquery.datetimepicker.js" />
+<script type="text/javascript">
+    var j = jQuery.noConflict();
+    j('document').ready(
+            j('#datetimepicker').datetimepicker()
+    );
+</script>
 </body>
 </html>
