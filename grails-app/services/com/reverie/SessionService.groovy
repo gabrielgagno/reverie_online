@@ -5,7 +5,7 @@ import grails.transaction.Transactional
 @Transactional
 class SessionService {
 
-    def serviceMethod() {
-
+    def getCurrentUser(String id) {
+        return User.findById(id)
     }
 }

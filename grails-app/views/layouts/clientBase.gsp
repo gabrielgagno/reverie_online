@@ -41,11 +41,17 @@
             </div>
         </g:if>
         <g:elseif test="${isSession==1}">
-            <div class="collapse navbar-collapse navHeaderCollapse">
+            <div class="collapse navbar-collapse navCollapse">
                 <ul class="nav navbar-nav">
                     <li><g:link controller="session" action="index"><i class="glyphicon glyphicon-home"></i> Home</g:link></li>
                     <li><a href="#"><i class="glyphicon glyphicon-user"></i> Profile</a></li>
-                    <li><a href="#"><i class="glyphicon glyphicon-plus"></i> New</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> New</a>
+                        <ul class="dropdown-menu">
+                            <li><g:link controller="jobs" action="newTask"><i class="glyphicon glyphicon-briefcase"></i> New Task</g:link></li>
+                            <li><g:link controller="jobs" action="newTask"><i class="glyphicon glyphicon-glass"></i> New Habit</g:link></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </g:elseif>

@@ -6,6 +6,7 @@ class Task extends Job{
     LocalDateTime deadline
     double weight
     int numOperations
+    float completionTime
     float minOperationDuration
     boolean hardDeadline
 
