@@ -19,7 +19,7 @@
 
 <body>
 <div class="navbar navbar-inverse navbar-static-top">
-    <div class="container">
+    <div class="container-fluid">
         <g:link controller="session" action="index" class="navbar-brand">Reverie Online</g:link>
         <button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navCollapse">
             <span class="icon-bar"></span>
