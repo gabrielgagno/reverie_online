@@ -16,7 +16,7 @@ class JobsController {
     }
 
     def newHabit(){
-
+        render(view:'newHabit', model:[isSession:1])
     }
 
     def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){

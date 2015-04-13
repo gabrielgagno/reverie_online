@@ -49,7 +49,7 @@
                         <a href="#" class="dropdown" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> New</a>
                         <ul class="dropdown-menu">
                             <li><g:link controller="jobs" action="newTask"><i class="glyphicon glyphicon-briefcase"></i> New Task</g:link></li>
-                            <li><g:link controller="jobs" action="newTask"><i class="glyphicon glyphicon-glass"></i> New Habit</g:link></li>
+                            <li><g:link controller="jobs" action="newHabit"><i class="glyphicon glyphicon-glass"></i> New Habit</g:link></li>
                         </ul>
                     </li>
                 </ul>

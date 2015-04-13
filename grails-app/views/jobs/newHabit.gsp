@@ -2,37 +2,43 @@
   Created by IntelliJ IDEA.
   User: Dell
   Date: 4/12/2015
-  Time: 2:56 AM
+  Time: 10:52 PM
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta name="layout" content="clientBase" />
-    <title>Add New Task</title>
+    <title>Add New Habit</title>
 </head>
 
 <body>
     <div class="container-fluid">
         <div class="row">
-            <g:form controller="jobs" action="addTask" method="POST" class="form-horizontal">
+            <g:form controller="jobs" action="addHabit" method="POST" class="form-horizontal">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="jobName">Task Name: </label>
+                        <label class="control-label col-lg-3" for="jobName">Habit Name: </label>
                         <div class="col-lg-9">
-                            <g:field type="text" name="jobName" id="jobName" required="required" placeholder="Job Name" class="form-control"/>
+                            <g:field type="text" name="jobName" id="jobName" required="required" placeholder="Habit Name" class="form-control"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="jobNotes">Job Notes: </label>
+                        <label class="control-label col-lg-3" for="jobNotes">Notes: </label>
                         <div class="col-lg-9">
-                            <g:textArea name="jobNotes" placeholder="Job Notes" id="jobNotes" class="form-control" />
+                            <g:textArea name="jobNotes" placeholder="Notes" id="jobNotes" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for deadline>Deadline: </label>
+                        <label class="control-label col-lg-3" for = "rangeStart">Range Start: </label>
                         <div class="col-lg-9">
-                            <input id="datetimepicker" type="text" readOnly="readonly" required="required" name="deadline" />
+                            <input id="rangeStart" type="text" readOnly="readonly" required="required" name="rangeStart" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3" for="rangeEnd">Range Start: </label>
+                        <div class="col-lg-9">
+                            <input id="rangeEnd" type="text" readOnly="readonly" required="required" name="rangeEnd" />
                         </div>
                     </div>
                 </div>
@@ -75,7 +81,14 @@
 <script type="text/javascript">
     var j = jQuery.noConflict();
     j('document').ready(
-            j('#datetimepicker').datetimepicker(
+            j('#rangeStart').datetimepicker(
+                    {
+                        inline:true,
+                        minDate: 0,
+                        step:30
+                    }
+            ),
+            j('#rangeEnd').datetimepicker(
                     {
                         inline:true,
                         minDate: 0,
