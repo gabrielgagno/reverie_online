@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="rangeEnd">Range Start: </label>
+                        <label class="control-label col-lg-3" for="rangeEnd">Range End: </label>
                         <div class="col-lg-9">
                             <input id="rangeEnd" type="text" readOnly="readonly" required="required" name="rangeEnd" />
                         </div>
@@ -44,22 +44,22 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label col-lg-4" for="completionTimeHour">Completion Time: </label>
+                        <label class="control-label col-lg-4" for="startHour">Start Time: </label>
                         <div class="input-group">
-                            <g:field type="number" name="completionTimeHour" id="completionTimeHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
+                            <g:field type="number" name="startHour" id="startHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
                             <span class="input-group-btn" style="width:0px;"></span>
-                            <select name="completionTimeMinute" class="form-control input-md" style="margin-left:-2px" required="required">
+                            <select name="startMinute" class="form-control input-md" style="margin-left:-2px" required="required">
                                 <option value="00">00</option>
                                 <option value="30">30</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-4" for="minOperationDurationHour">Minimum Division: </label>
+                        <label class="control-label col-lg-4" for="endHour">End Time: </label>
                         <div class="input-group">
-                            <g:field type="number" name="completionTimeHour" id="minOperationDurationHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
+                            <g:field type="number" name="endHour" id="endHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
                             <span class="input-group-btn" style="width:0px;"></span>
-                            <select name="minOperationDurationMinute" class="form-control input-md" style="margin-left:-2px" required="required">
+                            <select name="endMinute" class="form-control input-md" style="margin-left:-2px" required="required">
                                 <option value="00">00</option>
                                 <option value="30">30</option>
                             </select>
@@ -85,6 +85,7 @@
                     {
                         inline:true,
                         minDate: 0,
+                        timepicker: false,
                         step:30
                     }
             ),
@@ -92,6 +93,7 @@
                     {
                         inline:true,
                         minDate: 0,
+                        timepicker: false,
                         step:30
                     }
             )
