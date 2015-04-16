@@ -1,6 +1,8 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.joda.time.LocalDate
+import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
@@ -28,7 +30,22 @@ class UtilityService {
         t.save()
     }
 
-    def addHabit(Habit h){
+    def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY/MM/dd")
+        DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
+        LocalDate rs = dateFmt.parseLocalDate(rangeStart)
+        LocalDate re = dateFmt.parseLocalDate(rangeEnd)
+        LocalTime sh = timeFmt.parseLocalTime(startHour)
+        LocalTime eh = timeFmt.parseLocalTime(endHour)
+        Habit h = new Habit()
+        h.owner = owner
+        h.jobName = jobName
+        h.jobNotes = jobNotes
+        h.rangeStart = rs
+        h.rangeEnd = re
+        h.start = sh
+        h.end = eh
+        h.frequency = frequency
         h.save()
     }
 }

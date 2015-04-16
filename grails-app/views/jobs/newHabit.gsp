@@ -91,34 +91,34 @@
     j('document').ready(
             j('#rangeStart').datetimepicker(
                     {
-                        inline:true,
                         minDate: 0,
+                        datepicker: true,
                         timepicker: false,
-                        step:30
+                        format:'Y/m/d'
                     }
             ),
             j('#rangeEnd').datetimepicker(
                     {
-                        inline:true,
                         minDate: 0,
+                        datepicker: true,
                         timepicker: false,
-                        step:30
+                        format: 'Y/m/d'
                     }
             ),
             j('#startHour').datetimepicker(
                     {
-                        inline:true,
                         minDate: 0,
                         datepicker: false,
-                        step:30
+                        step:30,
+                        format: 'H:i'
                     }
             ),
             j('#endHour').datetimepicker(
                     {
-                        inline:true,
                         minDate: 0,
                         datepicker: false,
-                        step:30
+                        step:30,
+                        format: 'H:i'
                     }
             )
     );

@@ -13,6 +13,9 @@
         <g:if test="${isSession==1}">
             ${session.getAttribute("firstName")} ${session.getAttribute("lastName")} - Reverie Online
         </g:if>
+        <g:else>
+            Reverie Online - The Automated Task Scheduler
+        </g:else>
     </title>
 </head>
 
