@@ -11,6 +11,7 @@ class Habit extends Job{
     String frequency
 
     static constraints = {
+        frequency(inList: ['ONCE', 'DAILY', 'WEEKLY', 'MONTHLY', 'ANNUALLY'])
     }
     static belongsTo = [owner:User]
     static mapping = {

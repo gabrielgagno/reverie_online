@@ -30,4 +30,8 @@ class SessionController {
             redirect(action:'index', params: [errNo:2])
         }
     }
+
+    def settings(){
+
+    }
 }
