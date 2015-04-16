@@ -43,25 +43,33 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label col-lg-4" for="startHour">Start Time: </label>
-                        <div class="input-group">
-                            <g:field type="number" name="startHour" id="startHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
-                            <span class="input-group-btn" style="width:0px;"></span>
-                            <select name="startMinute" class="form-control input-md" style="margin-left:-2px" required="required">
-                                <option value="00">00</option>
-                                <option value="30">30</option>
-                            </select>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="startHour">Start Time: </label>
+                            <div class="input-group">
+                                <input type="text" name="startHour" id="startHour" required="required" readonly = "readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="endHour">End Time: </label>
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="text" name="endHour" id="endHour" required="required" readonly = "readonly"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-4" for="endHour">End Time: </label>
-                        <div class="input-group">
-                            <g:field type="number" name="endHour" id="endHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
-                            <span class="input-group-btn" style="width:0px;"></span>
-                            <select name="endMinute" class="form-control input-md" style="margin-left:-2px" required="required">
-                                <option value="00">00</option>
-                                <option value="30">30</option>
+                        <label class="control-label col-lg-2" for="frequency">Frequency: </label>
+                        <div class="col-lg-6">
+                            <select name="frequency" required="required" class="form-control" id="frequency">
+                                <option value="ONCE">Once</option>
+                                <option value="DAILY">Daily</option>
+                                <option value="WEEKLY">Weekly</option>
+                                <option value="MONTHLY">Monthly</option>
+                                <option value="ANNUALLY">Annually</option>
                             </select>
                         </div>
                     </div>
@@ -94,6 +102,22 @@
                         inline:true,
                         minDate: 0,
                         timepicker: false,
+                        step:30
+                    }
+            ),
+            j('#startHour').datetimepicker(
+                    {
+                        inline:true,
+                        minDate: 0,
+                        datepicker: false,
+                        step:30
+                    }
+            ),
+            j('#endHour').datetimepicker(
+                    {
+                        inline:true,
+                        minDate: 0,
+                        datepicker: false,
                         step:30
                     }
             )
