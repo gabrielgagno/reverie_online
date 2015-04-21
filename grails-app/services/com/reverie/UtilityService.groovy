@@ -2,7 +2,9 @@ package com.reverie
 
 import grails.transaction.Transactional
 import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
+import org.joda.time.Period
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
@@ -47,5 +49,21 @@ class UtilityService {
         h.end = eh
         h.frequency = frequency
         h.save()
+        LocalDate tempStart = rs
+        while(!tempStart.isAfter(re)){
+            int diff = Period.fieldDifference(rs, re).toStandardHours().getHours()
+            if(frequency.equals("ONCE")){
+                addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusHours(diff))
+                break;
+            }
+        }
+    }
+
+    def addSubTask(Job motherTask, LocalDateTime subTaskStart, LocalDateTime subTaskEnd){
+        SubTask st = new SubTask()
+        st.motherTask = motherTask
+        st.subTaskStart = subTaskStart
+        st.subTaskEnd = subTaskEnd
+        st.save()
     }
 }

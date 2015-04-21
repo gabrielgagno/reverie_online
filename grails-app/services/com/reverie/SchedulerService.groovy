@@ -1,10 +1,11 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.joda.time.LocalDateTime
 
 @Transactional
 class SchedulerService {
-
+    def utilityService
     def reDraw(){
         int i=0, j=0
         int index = 0
@@ -21,6 +22,9 @@ class SchedulerService {
              */
         Task[] tasks = Task.list()
         Habit[] habits = Habit.list()
+        //schedule habit subTasks first
+
+        //then schedule subtasks of task
 
     }
 
@@ -28,7 +32,7 @@ class SchedulerService {
 
     }
 
-    def fitToSchedule(){
+    def fitToSchedule(SubTask subTask, LocalDateTime dateStart, LocalDateTime dateEnd){
 
     }
 }

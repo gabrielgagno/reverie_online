@@ -1,10 +1,5 @@
 package com.reverie
 
-import org.joda.time.DateTime
-import org.joda.time.LocalDateTime
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
-
 class JobsController {
 
     def sessionService
