@@ -51,10 +51,21 @@ class UtilityService {
         h.save()
         LocalDate tempStart = rs
         while(!tempStart.isAfter(re)){
-            int diff = Period.fieldDifference(rs, re).toStandardHours().getHours()
+            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(eh))
             if(frequency.equals("ONCE")){
-                addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusHours(diff))
                 break;
+            }
+            else if(frequency.equals("DAILY")){
+                tempStart = tempStart.plusDays(1)
+            }
+            else if(frequency.equals("WEEKLY")){
+                tempStart = tempStart.plusWeeks(1)
+            }
+            else if(frequency.equals("MONTHLY")){
+                tempStart = tempStart.plusMonths(1)
+            }
+            else if(frequency.equals("ANNUALLY")){
+                tempStart = tempStart.plusYears(1)
             }
         }
     }
