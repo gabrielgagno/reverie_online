@@ -1,6 +1,7 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.joda.time.Instant
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
@@ -12,8 +13,11 @@ import org.joda.time.format.DateTimeFormatter
 class UtilityService {
     def sessionService
     def addTask(User owner, String jobName, String jobNotes, String deadline, float completionTimeHour, int completionTimeMinute, float minOperationDurationHour, int minOperationDurationMinute) {
-
         //process competionTime and minOperationDuration
+        LocalTime completionLocalTime
+        LocalTime minOpDurationLocalTime
+        completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
+        minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
         if(completionTimeMinute==30){
             completionTimeHour+=0.5
         }
@@ -27,7 +31,9 @@ class UtilityService {
         t.jobNotes = jobNotes
         t.deadline = fmt.parseLocalDateTime(deadline)
         t.completionTime = completionTimeHour
+        t.completionLocalTime = completionLocalTime
         t.minOperationDuration = minOperationDurationHour
+        t.minOpDurationLocalTime = minOpDurationLocalTime
         println(t.owner)
         t.save()
     }
@@ -77,4 +83,17 @@ class UtilityService {
         st.subTaskEnd = subTaskEnd
         st.save()
     }
+
+    def computeWeights(tasks, wx, wy){
+        for(Task t : tasks){
+            t.weight = weight(wx, wy, t.deadline.toDateTime().getMillis(), t.completionLocalTime.toDateTimeToday().getMillis())
+            t.save()
+        }
+    }
+
+    private double weight(int wx, int wy, long x, long y){
+        return (2*wx*x) + (wy*y)
+    }
+
+
 }

@@ -24,6 +24,8 @@ class SessionController {
             session.setAttribute("id", user.id)
             session.setAttribute("firstName", user.firstName)
             session.setAttribute("lastName", user.lastName)
+            session.setAttribute("deadlineConstant", user.deadlineConstant)
+            session.setAttribute("completionConstant", user.completionTimeConstant)
             redirect(action:'index')
         }
         else{

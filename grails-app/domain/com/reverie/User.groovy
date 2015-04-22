@@ -7,6 +7,8 @@ class User {
     String password
     String firstName
     String lastName
+    int deadlineConstant
+    int completionTimeConstant
 
     static hasMany = [habitQueue:Habit, priorityQueue:Task]
     static constraints = {

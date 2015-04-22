@@ -22,17 +22,15 @@ class SchedulerService {
              */
         Task[] tasks = Task.list()
         Habit[] habits = Habit.list()
-        //schedule habit subTasks first
 
         //then schedule subtasks of task
-
     }
 
     def fit(){
 
     }
 
-    def fitToSchedule(SubTask subTask, LocalDateTime dateStart, LocalDateTime dateEnd){
+    def fitToSchedule(LocalDateTime dateStart, LocalDateTime dateEnd){
 
     }
 }
