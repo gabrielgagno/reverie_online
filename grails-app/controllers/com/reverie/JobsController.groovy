@@ -16,8 +16,8 @@ class JobsController {
 
     def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
         utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour, completionTimeMinute, minOperationDurationHour, minOperationDurationMinute)
-        utilityService.computeWeights(Task.list(), session.getAttribute("deadlineConstant"), session.getAttribute("completionConstant"))
-        schedulerService.reDraw()
+        utilityService.computeWeights(Task.list(), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer())
     }
 
     def addHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){

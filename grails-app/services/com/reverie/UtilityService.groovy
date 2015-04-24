@@ -84,16 +84,18 @@ class UtilityService {
         st.save()
     }
 
-    def computeWeights(tasks, wx, wy){
+    def computeWeights(tasks, int wx, int wy){
         for(Task t : tasks){
             t.weight = weight(wx, wy, t.deadline.toDateTime().getMillis(), t.completionLocalTime.toDateTimeToday().getMillis())
             t.save()
         }
     }
 
-    private double weight(int wx, int wy, long x, long y){
+    private static double weight(int wx, int wy, long x, long y){
         return (2*wx*x) + (wy*y)
     }
 
-
+    def createDatePointer(){
+        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0)
+    }
 }
