@@ -1,5 +1,7 @@
 package com.reverie
 
+import org.joda.time.LocalDateTime
+
 class JobsController {
 
     def sessionService

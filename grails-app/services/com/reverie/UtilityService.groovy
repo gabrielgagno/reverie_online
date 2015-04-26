@@ -11,7 +11,6 @@ import org.joda.time.format.DateTimeFormatter
 
 @Transactional
 class UtilityService {
-    def sessionService
     def addTask(User owner, String jobName, String jobNotes, String deadline, float completionTimeHour, int completionTimeMinute, float minOperationDurationHour, int minOperationDurationMinute) {
         //process competionTime and minOperationDuration
         LocalTime completionLocalTime
@@ -97,5 +96,37 @@ class UtilityService {
 
     def createDatePointer(){
         return LocalDateTime.now().plusHours(1).withMinuteOfHour(0)
+    }
+
+    def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart){
+        for(SubTask x : subHabitList){
+            if(tStart.dayOfWeek() == x.subTaskStart.dayOfWeek()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    def floatToHoursMins(float x){
+        int[] arr
+        arr = new int[2]
+        float temp = x*60
+        arr[0] = (int) temp/60
+        arr[1] = (int) temp%60
+        return arr
+    }
+
+    def findNextHabit(Habit[] habits, LocalDateTime datePointer){
+        def query = SubTask.where {
+            inList("motherTask", habits)
+            order('subTaskEnd', 'asc')
+        }
+        SubTask[] subTasks = query.findAll()
+        for(SubTask st : subTasks){
+            if(st.subTaskEnd.isAfter(datePointer)){
+                return st.subTaskEnd
+            }
+        }
+
     }
 }
