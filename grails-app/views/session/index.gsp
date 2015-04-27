@@ -20,5 +20,15 @@
 </head>
 
 <body>
+    <g:if test="${isSession==1}">
+        TASKS
+        <g:each in="${tasks}">
+            <p>${it.jobName}</p>
+        </g:each>
+        HABITS
+        <g:each in="${habits}">
+            <p>${it.jobName}</p>
+        </g:each>
+    </g:if>
 </body>
 </html>

@@ -43,7 +43,7 @@
                             <g:field type="number" name="completionTimeHour" id="completionTimeHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
                             <span class="input-group-btn" style="width:0px;"></span>
                             <select name="completionTimeMinute" class="form-control input-md" style="margin-left:-2px" required="required">
-                                <option value="00">00</option>
+                                <option value="0">00</option>
                                 <option value="30">30</option>
                             </select>
                         </div>
@@ -51,10 +51,10 @@
                     <div class="form-group">
                         <label class="control-label col-lg-4" for="minOperationDurationHour">Minimum Division: </label>
                         <div class="input-group">
-                            <g:field type="number" name="completionTimeHour" id="minOperationDurationHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
+                            <g:field type="number" name="minOperationDurationHour" id="minOperationDurationHour" class="form-control input-md" min="0" placeholder="HH" required="required"/>
                             <span class="input-group-btn" style="width:0px;"></span>
                             <select name="minOperationDurationMinute" class="form-control input-md" style="margin-left:-2px" required="required">
-                                <option value="00">00</option>
+                                <option value="0">00</option>
                                 <option value="30">30</option>
                             </select>
                         </div>

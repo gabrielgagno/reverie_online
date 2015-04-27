@@ -6,7 +6,7 @@ import org.joda.time.LocalDateTime
 @Transactional
 class SchedulerService {
     def utilityService
-    def reDraw(LocalDateTime datePointer){
+    def reDraw(LocalDateTime datePointer, User owner){
         int i=0, j=0
         int index = 0
         /*
@@ -20,16 +20,17 @@ class SchedulerService {
                 else
                     index++ //next task in list
          */
-        Task[] tasks = Task.list()
-        Habit[] habits = Habit.list()
+        Task[] tasks = Task.findAllByOwner(owner)
+        Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks
-        SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.list()])
+        SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
         int scheduled = habits.length
         int totalNum = scheduled + tasks.length
         HashMap<String, Float> completionArray = new HashMap<String, Float>()
         //initialize hashMaps
         for(Task t : tasks){
-            minOpsArray.put(t.id, t.completionTime)
+            completionArray.put(t.id, t.completionTime)
+            println("COMPLETION ARRAY ELEMENT: " + t.id + " " + t.completionTime)
         }
         while(scheduled!=totalNum){
             //make new subtask here
@@ -41,35 +42,50 @@ class SchedulerService {
             int[] timeArray
             if(tasks[index].minOperationDuration >= completionArray.get(tasks[index].id)){
                 //  time of subtask is equal to completionTime in HashMap
+                println("GREAT" + completionArray.get(tasks[index].id))
                 timeArray = utilityService.floatToHoursMins(completionArray.get(tasks[index].id))
             }
             else{
                 // time of subtask is equal to minOpDuration
+                println("REMAIN")
                 timeArray = utilityService.floatToHoursMins(tasks[index].minOperationDuration)
             }
-
             //beginning of real algorithm
+
             if(fit(index, habits, tasks, datePointer, timeArray)){
                 //subtract for real the time
+                println("fitCheck")
                 completionArray.put(tasks[index].id, (float) completionArray.get(tasks[index].id)-tasks[index].minOperationDuration)
                 SubTask st = new SubTask()
                 st.motherTask = tasks[index]
                 st.subTaskStart = datePointer
                 st.subTaskEnd = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
+                datePointer = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
+                SubTask subHabitsTemp = utilityService.getAllSubHabits(owner)
+                for(SubTask sTemp : subHabitsTemp){
+                    if(utilityService.overlapFinder(datePointer, sTemp)){
+                        datePointer = sTemp.subTaskEnd
+                    }
+                }
                 st.save(flush:true)
-                if(completionArray.get(tasks[index])>=0){
+                println("NEW DATEPOINTER: " + datePointer.toString())
+                if(completionArray.get(tasks[index].id)<=0){
+                    println("scheduledOne")
                     scheduled++
                 }
-                index = scheduled
+                index = utilityService.findResetIndex(completionArray, tasks)
             }
             else{
                 if(index == tasks.length){
+                    println("nextHabit")
                     datePointer = utilityService.findNextHabit(habits, datePointer)
-                    index = scheduled
+                    index = utilityService.findResetIndex(completionArray, tasks)
                 }
                 else{
-                    index++
+                    println("not")
+                    index = utilityService.findNextIndex(completionArray, tasks, index)
                 }
+                println("index: " + index)
             }
             //end of real algorithm
         }
@@ -77,24 +93,34 @@ class SchedulerService {
     }
 
     boolean fit(int taskIndex, Habit[] habits, Task[] tasks, LocalDateTime tStart, int[] timeArray){
-        LocalDateTime tDead = tasks[taskIndex].deadline
-        LocalDateTime tEnd = tStart.plusHours(timeArray[0]).plusMinutes(timeArray[1])
-        int habitSize = habits.length
-        for(int i=0;i<habitSize;i++){
-            if(habits[i].start.isAfter(tStart.toLocalTime())){
-                boolean isOverlap = false;
-                isOverlap = habits[i].start.isAfter(tStart.toLocalTime()) && habits[i].end.isBefore(tEnd.toLocalTime())
-                if(isOverlap){
-                    if(habits[i].frequency.equals("ONCE") || habits[i].frequency.equals("DAILY")){
-                        return false
-                    }
-                }
-                else{
-                    SubTask[] subHabits = SubTask.findAllWhere(motherTask: habits[i])
-                    if(utilityService.habitSameDay(subHabits, tStart)){
-                        return false
-                    }
-                }
+
+        //get subhabits
+        def query = SubTask.where {
+            inList("motherTask", habits)
+        }
+        SubTask[] res = query.list(sort: "subTaskStart")
+        int i
+        /*
+        for(i=0;i<res.length;i++){
+            //TODO this
+            println(utilityService.overlapFinder(tStart, res[i]))
+            if(utilityService.overlapFinder(tStart, res[i])){
+                tStart = res[i].subTaskEnd
+                break
+            }
+        }*/
+        for(i=0;i<res.length;i++){
+            if(tStart.isBefore(res[i].subTaskStart)){
+                break;
+            }
+        }
+
+        def tEnd = tStart.plusHours(timeArray[0]).plusMinutes(timeArray[1])
+        println("I: " + i)
+        if(i<res.length){
+            println(tEnd.toString() + " " + res[i].subTaskStart.toString())
+            if(tEnd.compareTo(res[i].subTaskStart)>0){
+                return false
             }
         }
         return true;

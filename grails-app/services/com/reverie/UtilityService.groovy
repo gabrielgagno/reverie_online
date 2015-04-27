@@ -1,11 +1,9 @@
 package com.reverie
 
 import grails.transaction.Transactional
-import org.joda.time.Instant
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
-import org.joda.time.Period
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
@@ -34,7 +32,7 @@ class UtilityService {
         t.minOperationDuration = minOperationDurationHour
         t.minOpDurationLocalTime = minOpDurationLocalTime
         println(t.owner)
-        t.save()
+        t.save(flush:true)
     }
 
     def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
@@ -113,6 +111,8 @@ class UtilityService {
         float temp = x*60
         arr[0] = (int) temp/60
         arr[1] = (int) temp%60
+        println(arr[0])
+        println(arr[1])
         return arr
     }
 
@@ -129,4 +129,51 @@ class UtilityService {
         }
 
     }
+
+    def findResetIndex(HashMap<String, Float> completionList, Task[] taskList){
+        for(int i=0;i<taskList.size();i++){
+            if(completionList.get(taskList[i].id)>0){
+                return i
+            }
+        }
+        return -1
+    }
+
+    def findNextIndex(HashMap<String, Float> completionList, Task[] taskList, int index){
+        for(int i=index;i<taskList.size();i++){
+            if(completionList.get(taskList[i].id)>0){
+                return i
+            }
+        }
+        return -1
+    }
+
+    def getAllSubHabits(User subHabitOwner){
+        def query = SubTask.where {
+            inList("motherTask", Habit.findAllByOwner(subHabitOwner))
+        }
+        SubTask[] res = query.list(sort: "subTaskStart")
+        for(SubTask r : res){
+            println(r.subTaskStart.toString())
+        }
+    }
+
+    def overlapFinder(LocalDateTime datePointer, SubTask subTask){
+        if(datePointer.compareTo(subTask.subTaskStart)==0){
+            return true
+        }
+        return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
+    }
+
+    def findAllOwnedSubTasks(User owner){
+        def ownedTasks = Task.findAllByOwner(owner)
+        def ownedHabits = Habit.findAllByOwner(owner)
+
+        def query = SubTask.where {
+            (inList("motherTask", ownedTasks) || inList("motherTask", ownedHabits))
+        }
+
+        return query.list(sort: "subTaskStart")
+    }
+
 }
