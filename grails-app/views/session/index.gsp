@@ -42,7 +42,8 @@
                             center: 'title',
                             right: 'month, agendaWeek, agendaDay'
                         },
-                        eventLimit: true
+                        eventLimit: true,
+                        allDaySlot: false
                     })
 
                 });

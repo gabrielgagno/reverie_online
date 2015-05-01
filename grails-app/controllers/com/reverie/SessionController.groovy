@@ -7,7 +7,10 @@ class SessionController {
         def sessionInd
         if(session["id"]){
             sessionInd = 1
-            Task[] tasks = sessionService.getUserTasks()
+            User user = sessionService.getCurrentUser((String) session.getAttribute("id"))
+            Task[] tasks = sessionService.getUserTasks(user)
+            Habit[] habits = sessionService.getUserHabits(user)
+            SubTask[] subTasks = sessionService.getUserSubTasks(user)
         }
         else{
             sessionInd = 0
