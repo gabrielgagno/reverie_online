@@ -17,18 +17,37 @@
             Reverie Online - The Automated Task Scheduler
         </g:else>
     </title>
+    <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="fullcalendar.css"/>" />
+    <g:javascript src="jquery.js" />
+    <g:javascript src="moment.min.js" />
+    <g:javascript src="fullcalendar.js" />
 </head>
 
 <body>
-    <g:if test="${isSession==1}">
-        TASKS
-        <g:each in="${tasks}">
-            <p>${it.jobName}</p>
-        </g:each>
-        HABITS
-        <g:each in="${habits}">
-            <p>${it.jobName}</p>
-        </g:each>
-    </g:if>
+    <div class="container-fluid">
+        <g:if test="${isSession==1}">
+            <div id="calends" class="col-lg-offset-2 col-lg-8">
+
+            </div>
+            <script type="application/javascript">
+                var j = jQuery.noConflict();
+                j(document).ready(function() {
+
+                    // page is now ready, initialize the calendar...
+
+                    $('#calends').fullCalendar({
+                        defaultView: 'agendaWeek',
+                        header: {
+                            left: 'prev, next today',
+                            center: 'title',
+                            right: 'month, agendaWeek, agendaDay'
+                        },
+                        eventLimit: true
+                    })
+
+                });
+            </script>
+        </g:if>
+    </div>
 </body>
 </html>
