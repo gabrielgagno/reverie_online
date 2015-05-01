@@ -1,2 +1,3 @@
 web-app/images/* linguist-vendored
 web-app/js/* linguist-vendored
+web-app/css linguist-vendored
