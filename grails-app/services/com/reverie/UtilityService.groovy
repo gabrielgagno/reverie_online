@@ -158,22 +158,11 @@ class UtilityService {
         }
     }
 
-    def overlapFinder(LocalDateTime datePointer, SubTask subTask){
-        if(datePointer.compareTo(subTask.subTaskStart)==0){
+    def overlapFinder(LocalDateTime datePointer, SubTask subTask) {
+        if (datePointer.compareTo(subTask.subTaskStart) == 0) {
             return true
         }
         return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
-    }
-
-    def findAllOwnedSubTasks(User owner){
-        def ownedTasks = Task.findAllByOwner(owner)
-        def ownedHabits = Habit.findAllByOwner(owner)
-
-        def query = SubTask.where {
-            (inList("motherTask", ownedTasks) || inList("motherTask", ownedHabits))
-        }
-
-        return query.list(sort: "subTaskStart")
     }
 
 }

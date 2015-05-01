@@ -2,12 +2,12 @@ package com.reverie
 
 class SessionController {
 
-    def utilityService
     def sessionService
     def index(int errNo) {
         def sessionInd
         if(session["id"]){
             sessionInd = 1
+            Task[] tasks = sessionService.getUserTasks()
         }
         else{
             sessionInd = 0
