@@ -5,21 +5,30 @@ class SessionController {
     def sessionService
     def index(int errNo) {
         def sessionInd
+        Task[] tasks
+        Habit[] habits
+        SubTask[] subTasks
+        int subTaskSizeRedacted
         if(session["id"]){
             sessionInd = 1
             User user = sessionService.getCurrentUser((String) session.getAttribute("id"))
-            Task[] tasks = sessionService.getUserTasks(user)
-            Habit[] habits = sessionService.getUserHabits(user)
-            SubTask[] subTasks = sessionService.getUserSubTasks(user)
+            tasks = sessionService.getUserTasks(user)
+            habits = sessionService.getUserHabits(user)
+            subTasks = sessionService.getUserSubTasks(user)
+            subTaskSizeRedacted = subTasks.length - 1
         }
         else{
             sessionInd = 0
+            tasks = null
+            habits = null
+            subTasks = null
+            subTaskSizeRedacted = 0
         }
         if(errNo>0){
             render(view:'index', model:[isSession:sessionInd, error:errNo])
         }
         else{
-            render(view:'index', model:[isSession:sessionInd])
+            render(view:'index', model:[isSession:sessionInd, tasks: tasks, habits: habits, subTasks: subTasks, len: subTaskSizeRedacted])
         }
     }
 

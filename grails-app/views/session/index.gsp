@@ -5,7 +5,7 @@
   Time: 11:11 PM
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.reverie.SubTask" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta name="layout" content="clientBase" />
@@ -43,7 +43,20 @@
                             right: 'month, agendaWeek, agendaDay'
                         },
                         eventLimit: true,
-                        allDaySlot: false
+                        allDaySlot: false,
+                        events: [
+                            <g:each in="${subTasks}" status="i" var="it">
+                                {
+                                    id: '${it.id}',
+                                    name: '${it.motherTask.jobName}',
+                                    start: '${it.subTaskStart.toString()}',
+                                    end: '${it.subTaskEnd.toString()}'
+                                }
+                                <g:if test="${i<len}">
+                                    ,
+                                </g:if>
+                            </g:each>
+                        ]
                     })
 
                 });
