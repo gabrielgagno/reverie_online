@@ -48,7 +48,7 @@
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
                                     id: '${it.id}',
-                                    name: '${it.motherTask.jobName}',
+                                    title: '${it.motherTask.jobName}',
                                     start: '${it.subTaskStart.toString()}',
                                     end: '${it.subTaskEnd.toString()}'
                                 }

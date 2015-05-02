@@ -156,6 +156,7 @@ class UtilityService {
         for(SubTask r : res){
             println(r.subTaskStart.toString())
         }
+        return res
     }
 
     def overlapFinder(LocalDateTime datePointer, SubTask subTask) {

@@ -61,7 +61,7 @@ class SchedulerService {
                 st.subTaskStart = datePointer
                 st.subTaskEnd = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
                 datePointer = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
-                SubTask subHabitsTemp = utilityService.getAllSubHabits(owner)
+                SubTask[] subHabitsTemp = utilityService.getAllSubHabits(owner)
                 for(SubTask sTemp : subHabitsTemp){
                     if(utilityService.overlapFinder(datePointer, sTemp)){
                         datePointer = sTemp.subTaskEnd
@@ -69,6 +69,7 @@ class SchedulerService {
                 }
                 st.save(flush:true)
                 println("NEW DATEPOINTER: " + datePointer.toString())
+                println("COMPLETION ARRAY NOW: " + tasks[index].id + " " + completionArray.get(tasks[index].id))
                 if(completionArray.get(tasks[index].id)<=0){
                     println("scheduledOne")
                     scheduled++

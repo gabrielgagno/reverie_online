@@ -16,6 +16,9 @@ class SessionController {
             habits = sessionService.getUserHabits(user)
             subTasks = sessionService.getUserSubTasks(user)
             subTaskSizeRedacted = subTasks.length - 1
+            for(SubTask st : subTasks){
+                println(st.motherTask.jobName + " " + st.subTaskStart.toString() + " " + st.subTaskEnd.toString())
+            }
         }
         else{
             sessionInd = 0
