@@ -20,7 +20,13 @@ class SchedulerService {
                 else
                     index++ //next task in list
          */
-        Task[] tasks = Task.findAllByOwner(owner)
+        SubTask[] subHabitsTemp = utilityService.getAllSubHabits(owner)
+        for(SubTask sTemp : subHabitsTemp){
+            if(utilityService.overlapFinder(datePointer, sTemp)){
+                datePointer = sTemp.subTaskEnd
+            }
+        }
+        Task[] tasks = Task.findAllByOwner(owner, [sort: "weight"])
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks
         SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
@@ -61,7 +67,7 @@ class SchedulerService {
                 st.subTaskStart = datePointer
                 st.subTaskEnd = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
                 datePointer = datePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
-                SubTask[] subHabitsTemp = utilityService.getAllSubHabits(owner)
+                subHabitsTemp = utilityService.getAllSubHabits(owner)
                 for(SubTask sTemp : subHabitsTemp){
                     if(utilityService.overlapFinder(datePointer, sTemp)){
                         datePointer = sTemp.subTaskEnd

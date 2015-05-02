@@ -47,7 +47,7 @@
                         events: [
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
-                                    id: '${it.id}',
+                                    id: '${it.motherTask.id}',
                                     title: '${it.motherTask.jobName}',
                                     start: '${it.subTaskStart.toString()}',
                                     end: '${it.subTaskEnd.toString()}'

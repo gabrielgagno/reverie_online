@@ -91,7 +91,7 @@
     j('document').ready(
             j('#rangeStart').datetimepicker(
                     {
-                        //minDate: 0,
+                        minDate: 0,
                         datepicker: true,
                         timepicker: false,
                         format:'Y/m/d'
@@ -99,7 +99,7 @@
             ),
             j('#rangeEnd').datetimepicker(
                     {
-                        //minDate: 0,
+                        minDate: 0,
                         datepicker: true,
                         timepicker: false,
                         format: 'Y/m/d'
@@ -107,7 +107,7 @@
             ),
             j('#startHour').datetimepicker(
                     {
-                        //minDate: 0,
+                        minDate: 0,
                         datepicker: false,
                         step:30,
                         format: 'H:i'
@@ -115,7 +115,7 @@
             ),
             j('#endHour').datetimepicker(
                     {
-                        //minDate: 0,
+                        minDate: 0,
                         datepicker: false,
                         step:30,
                         format: 'H:i'

@@ -93,7 +93,7 @@ class UtilityService {
     }
 
     def createDatePointer(){
-        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0)
+        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
     }
 
     def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart){
