@@ -26,7 +26,7 @@ class SchedulerService {
                 datePointer = sTemp.subTaskEnd
             }
         }
-        Task[] tasks = Task.findAllByOwner(owner, [sort: "weight"])
+        Task[] tasks = Task.findAllByOwnerAndWeightGreaterThan(owner, 0, [sort: "weight"])
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks
         SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
