@@ -26,7 +26,17 @@ class SchedulerService {
                 datePointer = sTemp.subTaskEnd
             }
         }
-        Task[] tasks = Task.findAllByOwnerAndWeightGreaterThan(owner, 0, [sort: "weight"])
+        Task[] tasksTemp = Task.findAllByOwner(owner, [sort: "weight"])
+        def list = []
+        tasksTemp.each {
+            if(it.deadline.isAfter(datePointer)){
+                list << it
+            }
+        }
+        Task[] tasks = list
+        for(Task t : tasks){
+            println(t.jobName)
+        }
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks
         SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
@@ -38,6 +48,7 @@ class SchedulerService {
             completionArray.put(t.id, t.completionTime)
             println("COMPLETION ARRAY ELEMENT: " + t.id + " " + t.completionTime)
         }
+
         while(scheduled!=totalNum){
             //make new subtask here
             //check first if minOperationDuration >= completionTime in HashMap
@@ -96,16 +107,16 @@ class SchedulerService {
             }
             //end of real algorithm
         }
-        //then schedule subtasks of task
     }
 
     boolean fit(int taskIndex, Habit[] habits, Task[] tasks, LocalDateTime tStart, int[] timeArray){
-
-        //get subhabits
-        def query = SubTask.where {
-            inList("motherTask", habits)
+        SubTask[] res = []
+        if(habits.size()!=0) {
+            def query = SubTask.where {
+                inList("motherTask", habits)
+            }
+            res = query.list(sort: "subTaskStart")
         }
-        SubTask[] res = query.list(sort: "subTaskStart")
         int i
         /*
         for(i=0;i<res.length;i++){

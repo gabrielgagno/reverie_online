@@ -149,14 +149,19 @@ class UtilityService {
     }
 
     def getAllSubHabits(User subHabitOwner){
-        def query = SubTask.where {
-            inList("motherTask", Habit.findAllByOwner(subHabitOwner))
+        if(Habit.list().size()==0){
+            return []
         }
-        SubTask[] res = query.list(sort: "subTaskStart")
-        for(SubTask r : res){
-            println(r.subTaskStart.toString())
+        else {
+            def query = SubTask.where {
+                inList("motherTask", Habit.findAllByOwner(subHabitOwner))
+            }
+            SubTask[] res = query.list(sort: "subTaskStart")
+            for (SubTask r : res) {
+                println(r.subTaskStart.toString())
+            }
+            return res
         }
-        return res
     }
 
     def overlapFinder(LocalDateTime datePointer, SubTask subTask) {

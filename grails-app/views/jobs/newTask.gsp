@@ -78,7 +78,7 @@
             j('#datetimepicker').datetimepicker(
                     {
                         inline:true,
-                        minDate: 0,
+                        //minDate: 0,
                         step:30
                     }
             )
