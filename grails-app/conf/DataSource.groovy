@@ -1,9 +1,9 @@
 dataSource {
     pooled = true
     jmxExport = true
-    //driverClassName = "org.h2.Driver"
-    driverClassName = "com.mysql.jdbc.Driver"
-    dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
+    //driverClassName = "org.h2.Driver" //h2
+    driverClassName = "com.mysql.jdbc.Driver" //mysql
+    dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
     username = "root"
     password = ""
 }
@@ -20,22 +20,22 @@ environments {
     development {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-            //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8"
+            //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
     test {
         dataSource {
             dbCreate = "update"
-            //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8"
+            //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8"
+            //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true
