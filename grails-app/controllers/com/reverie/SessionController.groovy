@@ -51,6 +51,10 @@ class SessionController {
     }
 
     def settings(){
+        render(view: 'settings', model:[isSession: 1])
+    }
+
+    def saveSettings(){
 
     }
 }
