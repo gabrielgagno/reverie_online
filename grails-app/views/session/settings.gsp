@@ -45,6 +45,19 @@
                     <g:field type="password" name="pw" id="pw" placeholder="Password" required="required" class="form-control" />
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-lg-push-2 col-lg-3">Priority: </label>
+                <div class="col-lg-6">
+                    <g:radio name="priority" value="1" class="radio-button" id="deadlineRadio"/> <label class="col-lg-push-2" for="deadlineRadio">Deadline</label>
+                    <g:radio name="priority" value="2" class="radio-button" id="completionTimeRadio"/> <label class="col-lg-push-2" for="completionTimeRadio">Completion Time</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-push-2 col-lg-9">
+                    <g:submitButton name="submit" value="Save Changes" class="btn btn-primary" />
+                    <g:link controller="session" action="index" class="btn btn-danger">Cancel</g:link>
+                </div>
+            </div>
         </g:form>
     </div>
 </body>
