@@ -52,6 +52,7 @@
                             <li><g:link controller="jobs" action="newHabit"><i class="glyphicon glyphicon-glass"></i> New Habit</g:link></li>
                         </ul>
                     </li>
+                    <li><g:link controller="session" action="settings"><i class="glyphicon glyphicon-cog"></i> Settings</g:link></li>
                 </ul>
             </div>
         </g:elseif>
