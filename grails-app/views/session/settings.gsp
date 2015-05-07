@@ -18,25 +18,25 @@
             <div class="form-group">
                 <label for="firstName" class="col-lg-push-2 col-lg-3">First Name: </label>
                 <div class="col-lg-6">
-                    <g:textField name="firstName" id="firstName" placeholder="First Name" required="required" class="form-control" />
+                    <g:textField name="firstName" id="firstName" placeholder="First Name" required="required" class="form-control" value="${firstName}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName" class="col-lg-push-2 col-lg-3">Last Name: </label>
                 <div class="col-lg-6">
-                    <g:textField name="lastName" id="lastName" placeholder="Last Name" required="required" class="form-control" />
+                    <g:textField name="lastName" id="lastName" placeholder="Last Name" required="required" class="form-control" value="${lastName}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="Email" class="col-lg-push-2 col-lg-3">E-mail: </label>
                 <div class="col-lg-6">
-                    <g:field type="email" name="email" id="email" placeholder="E-mail" required="required" class="form-control" />
+                    <g:field type="email" name="email" id="email" placeholder="E-mail" required="required" class="form-control" value="${email}"/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="userName" class="col-lg-push-2 col-lg-3">Username: </label>
                 <div class="col-lg-6">
-                    <g:textField name="userName" id="userName" placeholder="Username" required="required" class="form-control" readonly="readonly"/>
+                    <g:textField name="userName" id="userName" placeholder="Username" required="required" class="form-control" readonly="readonly" value="${username}"/>
                 </div>
             </div>
             <div class="form-group">
@@ -48,8 +48,18 @@
             <div class="form-group">
                 <label class="col-lg-push-2 col-lg-3">Priority: </label>
                 <div class="col-lg-6">
-                    <g:radio name="priority" value="1" class="radio-button" id="deadlineRadio"/> <label class="col-lg-push-2" for="deadlineRadio">Deadline</label>
-                    <g:radio name="priority" value="2" class="radio-button" id="completionTimeRadio"/> <label class="col-lg-push-2" for="completionTimeRadio">Completion Time</label>
+                    <g:if test="${deadline>completion}">
+                        <g:radio name="priority" value="1" class="radio-button" id="deadlineRadio" checked="true"/> <label class="col-lg-push-2" for="deadlineRadio">Deadline</label>
+                    </g:if>
+                    <g:else>
+                        <g:radio name="priority" value="1" class="radio-button" id="deadlineRadio" /> <label class="col-lg-push-2" for="deadlineRadio">Deadline</label>
+                    </g:else>
+                    <g:if test="${deadline<completion}">
+                        <g:radio name="priority" value="2" class="radio-button" id="completionTimeRadio" checked="true"/> <label class="col-lg-push-2" for="completionTimeRadio">Completion Time</label>
+                    </g:if>
+                    <g:else>
+                        <g:radio name="priority" value="2" class="radio-button" id="completionTimeRadio" /> <label class="col-lg-push-2" for="completionTimeRadio">Completion Time</label>
+                    </g:else>
                 </div>
             </div>
             <div class="form-group">

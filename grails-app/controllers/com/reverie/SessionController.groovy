@@ -51,10 +51,17 @@ class SessionController {
     }
 
     def settings(){
-        render(view: 'settings', model:[isSession: 1])
+        if(session["id"]){
+            def user = sessionService.getCurrentUser((String) session.getAttribute("id"))
+            render(view: 'settings', model:[isSession: 1, firstName: session.getAttribute("firstName"), lastName: session.getAttribute("lastName"), email: user.email, username: user.username, deadline: user.deadlineConstant, completion:user.completionTimeConstant])
+        }
+        else{
+            redirect(action: 'index', model:[isSession: 0])
+        }
     }
 
-    def saveSettings(){
+    def saveSettings(String firstName, String lastName, String email, String password, int priority){
 
+        redirect(action: 'index', model:[isSession: 1])
     }
 }
