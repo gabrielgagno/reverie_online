@@ -29,7 +29,8 @@ class SessionService {
     }
 
     def saveSettings(String id, String firstName, String lastName, String email, String password, int priority){
-        User user = getCurrentUser(id)
+        def user = getCurrentUser(id)
+        println(user.password)
         user.firstName = firstName
         user.lastName = lastName
         user.email = email

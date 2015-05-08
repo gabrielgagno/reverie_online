@@ -60,8 +60,8 @@ class SessionController {
         }
     }
 
-    def saveSettings(String firstName, String lastName, String email, String password, int priority){
-        sessionService.saveSettings((String) session["id"], firstName, lastName, email, password, priority)
+    def saveSettings(String firstName, String lastName, String email, String pw, int priority){
+        sessionService.saveSettings((String) session["id"], firstName, lastName, email, pw, priority)
         redirect(action: 'index', model:[isSession: 1])
     }
 }

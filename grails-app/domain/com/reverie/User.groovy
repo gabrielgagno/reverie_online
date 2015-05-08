@@ -18,6 +18,5 @@ class User {
 
     static mapping = {
         id(generator: "uuid", length: 36)
-        version false
     }
 }
