@@ -9,7 +9,7 @@ class JobsController {
     def schedulerService
 
     def newTask(){
-        render(view:'newTask', model:[isSession:1])
+        render(view:'newTask', model:[isSession:1, jobName: "", jobNotes: "", deadline: "", completionHr:0, completionMin:0, minDivHr: 0, minDivMin:0])
     }
 
     def newHabit(){
