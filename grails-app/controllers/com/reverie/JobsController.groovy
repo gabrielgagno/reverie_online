@@ -35,8 +35,9 @@ class JobsController {
     }
 
     def jobsList(){
-
-        render(view: 'jobsList', model:[isSession: 1])
+        def tasks = Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
+        def habits = Habit.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
+        render(view: 'jobsList', model:[isSession: 1, tasks: tasks, habits:habits])
     }
 
     //fetch subtask

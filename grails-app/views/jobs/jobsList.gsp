@@ -18,9 +18,35 @@
         <div class="row">
             <div class="col-lg-6">
                 <h2 class="h2">Tasks</h2>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Task</th>
+                        <th colspan="2" class="text-center">Actions</th>
+                    </tr>
+                    <g:each in="${tasks}">
+                        <tr>
+                            <td>${it.jobName}</td>
+                            <td>hi</td>
+                            <td>hi</td>
+                        </tr>
+                    </g:each>
+                </table>
             </div>
             <div class="col-lg-6">
                 <h2 class="h2">Habits</h2>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Habits</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                    <g:each in="${habits}">
+                        <tr>
+                            <td>${it.jobName}</td>
+                            <td>hi</td>
+                            <td>hi</td>
+                        </tr>
+                    </g:each>
+                </table>
             </div>
         </div>
     </div>
