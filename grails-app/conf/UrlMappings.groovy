@@ -13,6 +13,7 @@ class UrlMappings {
         "/myjobs"(controller: "jobs", action: "jobsList")
         "/new/task"(controller: "jobs", action: "newTask")
         "/new/habit"(controller: "jobs", action: "newHabit")
+        "/edit/task"(controller: "jobs", action: "editTask")
         "500"(view:'/error')
         "404"(view:'notFound')
 	}

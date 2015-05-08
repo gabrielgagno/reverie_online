@@ -40,5 +40,12 @@ class JobsController {
         render(view: 'jobsList', model:[isSession: 1, tasks: tasks, habits:habits])
     }
 
+    def editTask(){
+        [isSession: 1]
+    }
+
+    def editHabit(){
+        [isSession: 1]
+    }
     //fetch subtask
 }

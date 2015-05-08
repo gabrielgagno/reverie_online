@@ -26,7 +26,7 @@
                     <g:each in="${tasks}">
                         <tr>
                             <td>${it.jobName}</td>
-                            <td>hi</td>
+                            <td><g:link controller="jobs" action="editTask" params="${[id: it.id]}" class="btn btn-info"><i class="glyphicon glyphicon-pencil"></i></g:link></td>
                             <td>hi</td>
                         </tr>
                     </g:each>
@@ -42,7 +42,7 @@
                     <g:each in="${habits}">
                         <tr>
                             <td>${it.jobName}</td>
-                            <td>hi</td>
+                            <td><g:link controller="jobs" action="editHabit" params="${[id: it.id]}" class="btn btn-info"><i class="glyphicon glyphicon-pencil"></i></g:link></td>
                             <td>hi</td>
                         </tr>
                     </g:each>
