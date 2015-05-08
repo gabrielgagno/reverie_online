@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label for="pw" class="col-lg-push-2 col-lg-3">Username: </label>
                 <div class="col-lg-6">
-                    <g:field type="password" name="pw" id="pw" placeholder="Password" required="required" class="form-control" />
+                    <g:field type="password" name="pw" id="pw" placeholder="Password" required="required" class="form-control" value="${password}"/>
                 </div>
             </div>
             <div class="form-group">

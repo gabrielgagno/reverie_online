@@ -53,7 +53,7 @@ class SessionController {
     def settings(){
         if(session["id"]){
             def user = sessionService.getCurrentUser((String) session.getAttribute("id"))
-            render(view: 'settings', model:[isSession: 1, firstName: session.getAttribute("firstName"), lastName: session.getAttribute("lastName"), email: user.email, username: user.username, deadline: user.deadlineConstant, completion:user.completionTimeConstant])
+            render(view: 'settings', model:[isSession: 1, firstName: session.getAttribute("firstName"), lastName: session.getAttribute("lastName"), email: user.email, username: user.username, deadline: user.deadlineConstant, completion:user.completionTimeConstant, password:user.password])
         }
         else{
             redirect(action: 'index', model:[isSession: 0])
@@ -61,7 +61,7 @@ class SessionController {
     }
 
     def saveSettings(String firstName, String lastName, String email, String password, int priority){
-
+        sessionService.saveSettings((String) session["id"], firstName, lastName, email, password, priority)
         redirect(action: 'index', model:[isSession: 1])
     }
 }

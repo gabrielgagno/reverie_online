@@ -27,4 +27,21 @@ class SessionService {
 
         return query.list(sort: "subTaskStart")
     }
+
+    def saveSettings(String id, String firstName, String lastName, String email, String password, int priority){
+        User user = getCurrentUser(id)
+        user.firstName = firstName
+        user.lastName = lastName
+        user.email = email
+        user.password = password
+        if(priority==1){
+            user.deadlineConstant = 2
+            user.completionTimeConstant = 1
+        }
+        else{
+            user.deadlineConstant = 1
+            user.completionTimeConstant = 2
+        }
+        user.save()
+    }
 }
