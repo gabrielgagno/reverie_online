@@ -2,6 +2,7 @@ dataSource {
     pooled = true
     jmxExport = true
     //driverClassName = "org.h2.Driver" //h2
+    //driverClassName = "org.postgresql.Driver" //postgresql
     driverClassName = "com.mysql.jdbc.Driver" //mysql
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
     username = "root"
@@ -21,6 +22,7 @@ environments {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
@@ -28,6 +30,7 @@ environments {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
@@ -35,6 +38,7 @@ environments {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
+            //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation

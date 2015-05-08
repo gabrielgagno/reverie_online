@@ -44,7 +44,7 @@
             <div class="collapse navbar-collapse navCollapse">
                 <ul class="nav navbar-nav">
                     <li><g:link controller="session" action="index"><i class="glyphicon glyphicon-home"></i> Home</g:link></li>
-                    <li><a href="#"><i class="glyphicon glyphicon-user"></i> Profile</a></li>
+                    <li><g:link controller="jobs" action="jobsList"><i class="glyphicon glyphicon-calendar"></i> My Jobs</g:link></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> New</a>
                         <ul class="dropdown-menu">

@@ -34,5 +34,10 @@ class JobsController {
         redirect(controller: 'session', action: 'index')
     }
 
+    def jobsList(){
+
+        render(view: 'jobsList', model:[isSession: 1])
+    }
+
     //fetch subtask
 }
