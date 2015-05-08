@@ -64,6 +64,7 @@
     </div>
     <div class="form-group">
         <div class="col-lg-offset-6">
+            <g:field type="hidden" name="id" value="${id}" />
             <g:submitButton name="save" value="Save" class="btn btn-primary"/>
             <g:link controller="session" action="index" class="btn btn-danger">Cancel</g:link>
         </div>

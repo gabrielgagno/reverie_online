@@ -13,6 +13,13 @@
 </head>
 
 <body>
-    <g:render template="taskForm" />
+<div class="container-fluid">
+    <div class="row">
+        <g:form controller="jobs" action="doEditTask" method="POST" class="form-horizontal">
+            <g:render template="taskForm" />
+        </g:form>
+    </div>
+</div>
+<g:render template="taskJs" />
 </body>
 </html>

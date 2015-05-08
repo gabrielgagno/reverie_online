@@ -7,6 +7,10 @@
             j('#datetimepicker').datetimepicker(
                     {
                         inline:true,
+                        <g:if test="${!deadline.equals("")}">
+                        value: '${deadline}',
+                        format: 'Y/m/d H:i',
+                        </g:if>
                         //minDate: 0,
                         step:30
                     }
