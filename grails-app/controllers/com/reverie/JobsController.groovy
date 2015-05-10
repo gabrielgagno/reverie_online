@@ -69,6 +69,8 @@ class JobsController {
         def subtasks = SubTask.findAllByMotherTask(task)
         SubTask.deleteAll(subtasks)
         task.delete()
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         jobsList()
     }
 
@@ -83,6 +85,16 @@ class JobsController {
         def subTasks = SubTask.findAllByMotherTask(Habit.findById((String) params.id))
         SubTask.deleteAll(subTasks)
         utilityService.editHabit((String) params.id, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        jobsList()
+    }
+
+    def deleteHabit(String id){
+        def habit = Habit.findById(id)
+        def subtasks = SubTask.findAllByMotherTask(habit)
+        SubTask.deleteAll(subtasks)
+        habit.delete()
         utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
         schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         jobsList()

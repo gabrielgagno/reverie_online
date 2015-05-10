@@ -43,7 +43,7 @@
                         <tr>
                             <td>${it.jobName}</td>
                             <td><g:link controller="jobs" action="editHabit" params="${[id: it.id]}" class="btn btn-info"><i class="glyphicon glyphicon-pencil"></i></g:link></td>
-                            <td>hi</td>
+                            <td><g:link controller="jobs" action="deleteHabit" params="${[id: it.id]}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></g:link></td>
                         </tr>
                     </g:each>
                 </table>
