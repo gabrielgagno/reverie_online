@@ -30,7 +30,7 @@ class JobsController {
 
     def addHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
         utilityService.addHabit(sessionService.getCurrentUser((String) session.getAttribute("id")), jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
-        if(Task.list().size()>0) {
+        if(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))).size()>0) {
             utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         }
@@ -51,14 +51,19 @@ class JobsController {
         [id: task.id, isSession:1, jobName: task.jobName, jobNotes: task.jobNotes, deadline: fmt.print(task.deadline), completionHr:cArr[0], completionMin:cArr[1], minDivHr: mDArr[0], minDivMin:mDArr[1]]
     }
 
-    def doEditTask(/*put params here*/){
+    def doEditTask(String idContainer, String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
         //delete subtasks
-        //update task
-        //compute weights
-        //redraw
+        def subTasks = SubTask.findAllByMotherTask(Task.findById(idContainer))
+        SubTask.deleteAll(subTasks)
+        utilityService.editTask(idContainer, jobName, jobNotes, deadline, completionTimeHour, completionTimeMinute, minOperationDurationHour, minOperationDurationMinute)
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
+        redirect(controller: 'session', action: 'index')
     }
 
-    def editHabit(){
+    def editHabit(String id){
+        task = Task.findById(id)
         [isSession: 1]
     }
 

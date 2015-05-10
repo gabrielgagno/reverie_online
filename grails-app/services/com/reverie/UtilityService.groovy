@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
+import org.joda.time.Minutes
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
@@ -31,7 +32,6 @@ class UtilityService {
         t.completionLocalTime = completionLocalTime
         t.minOperationDuration = minOperationDurationHour
         t.minOpDurationLocalTime = minOpDurationLocalTime
-        println(t.owner)
         t.save(flush:true)
     }
 
@@ -53,10 +53,12 @@ class UtilityService {
         h.frequency = frequency
         h.save()
         LocalDate tempStart = rs
+        int minutes = Minutes.minutesBetween(sh, eh).getMinutes()
+        println(minutes)
         while(!tempStart.isAfter(re)){
-            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(eh))
+            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
             if(frequency.equals("ONCE")){
-                break;
+                break
             }
             else if(frequency.equals("DAILY")){
                 tempStart = tempStart.plusDays(1)
@@ -169,6 +171,29 @@ class UtilityService {
             return true
         }
         return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
+    }
+
+    def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
+        LocalTime completionLocalTime
+        LocalTime minOpDurationLocalTime
+        completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
+        minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
+        if(completionTimeMinute==30){
+            completionTimeHour+=0.5
+        }
+        if(minOperationDurationMinute==30){
+            minOperationDurationHour+=0.5
+        }
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
+        def task = Task.findById(id)
+        task.jobName = jobName
+        task.jobNotes = jobNotes
+        task.deadline = fmt.parseLocalDateTime(deadline)
+        task.completionTime = completionTimeHour
+        task.completionLocalTime = completionLocalTime
+        task.minOperationDuration = minOperationDurationHour
+        task.minOpDurationLocalTime = minOpDurationLocalTime
+        task.save(failOnError: true)
     }
 
 }
