@@ -36,7 +36,7 @@ class UtilityService {
     }
 
     def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
-        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY/MM/dd")
+        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
         LocalDate rs = dateFmt.parseLocalDate(rangeStart)
         LocalDate re = dateFmt.parseLocalDate(rangeEnd)
@@ -196,4 +196,38 @@ class UtilityService {
         task.save(failOnError: true)
     }
 
+    def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
+        DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
+        def habit = Habit.findById(id)
+        habit.jobName = jobName
+        habit.jobNotes = jobNotes
+        habit.rangeStart = dateFmt.parseLocalDate(rangeStart)
+        habit.rangeEnd = dateFmt.parseLocalDate(rangeEnd)
+        habit.start = timeFormatter.parseLocalTime(startHour)
+        habit.end = timeFormatter.parseLocalTime(endHour)
+        habit.frequency = frequency
+        habit.save(failOnError: true)
+        LocalDate tempStart = habit.rangeStart
+        int minutes = Minutes.minutesBetween(habit.start, habit.end).getMinutes()
+        println(minutes)
+        while(!tempStart.isAfter(habit.rangeEnd)){
+            addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))
+            if(frequency.equals("ONCE")){
+                break
+            }
+            else if(frequency.equals("DAILY")){
+                tempStart = tempStart.plusDays(1)
+            }
+            else if(frequency.equals("WEEKLY")){
+                tempStart = tempStart.plusWeeks(1)
+            }
+            else if(frequency.equals("MONTHLY")){
+                tempStart = tempStart.plusMonths(1)
+            }
+            else if(frequency.equals("ANNUALLY")){
+                tempStart = tempStart.plusYears(1)
+            }
+        }
+    }
 }

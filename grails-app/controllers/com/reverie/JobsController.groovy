@@ -1,5 +1,6 @@
 package com.reverie
 
+import grails.plugin.jodatime.binding.DateTimeConverter
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -72,12 +73,19 @@ class JobsController {
     }
 
     def editHabit(String id){
-        task = Task.findById(id)
-        [isSession: 1]
+        def habit = Habit.findById(id)
+        println(habit.start.toString())
+        DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
+        [id: habit.id, isSession: 1, jobName: habit.jobName, jobNotes: habit.jobNotes, rangeStart: habit.rangeStart.toString(), rangeEnd: habit.rangeEnd.toString(), start: timeFormatter.print(habit.start), end: timeFormatter.print(habit.end), frequency: habit.frequency]
     }
 
-    def doEditHabit(){
-
+    def doEditHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+        def subTasks = SubTask.findAllByMotherTask(Habit.findById((String) params.id))
+        SubTask.deleteAll(subTasks)
+        utilityService.editHabit((String) params.id, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        jobsList()
     }
     //fetch subtask
 }

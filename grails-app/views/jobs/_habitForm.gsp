@@ -2,13 +2,13 @@
     <div class="form-group">
         <label class="control-label col-lg-3" for="jobName">Habit Name: </label>
         <div class="col-lg-9">
-            <g:field type="text" name="jobName" id="jobName" required="required" placeholder="Habit Name" class="form-control"/>
+            <g:field type="text" name="jobName" id="jobName" required="required" placeholder="Habit Name" class="form-control" value="${jobName}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-lg-3" for="jobNotes">Notes: </label>
         <div class="col-lg-9">
-            <g:textArea name="jobNotes" placeholder="Notes" id="jobNotes" class="form-control" />
+            <g:textArea name="jobNotes" placeholder="Notes" id="jobNotes" class="form-control" value="${jobNotes}"/>
         </div>
     </div>
     <div class="form-group">
@@ -47,11 +47,33 @@
         <label class="control-label col-lg-2" for="frequency">Frequency: </label>
         <div class="col-lg-6">
             <select name="frequency" required="required" class="form-control" id="frequency">
-                <option value="ONCE">Once</option>
-                <option value="DAILY">Daily</option>
-                <option value="WEEKLY">Weekly</option>
-                <option value="MONTHLY">Monthly</option>
-                <option value="ANNUALLY">Annually</option>
+                <%
+                    def oLabel = ""
+                    def dLabel = ""
+                    def wLabel = ""
+                    def mLabel = ""
+                    def yLabel = ""
+                    if(frequency.equals("ONCE")){
+                        oLabel = " selected"
+                    }
+                    else if(frequency.equals("DAILY")){
+                        dLabel = " selected"
+                    }
+                    else if(frequency.equals("WEEKLY")){
+                        wLabel =  " selected"
+                    }
+                    else if(frequency.equals("MONTHLY")){
+                        mLabel = " selected"
+                    }
+                    else if(frequency.equals("ANNUALLY")){
+                        yLabel = " selected"
+                    }
+                    %>
+                <option value="ONCE"${oLabel}>Once</option>
+                <option value="DAILY"${dLabel}>Daily</option>
+                <option value="WEEKLY"${wLabel}>Weekly</option>
+                <option value="MONTHLY"${mLabel}>Monthly</option>
+                <option value="ANNUALLY"${yLabel}>Annually</option>
             </select>
         </div>
     </div>

@@ -9,7 +9,10 @@
                         minDate: 0,
                         datepicker: true,
                         timepicker: false,
-                        format:'Y/m/d'
+                        <g:if test="${!rangeStart.equals(null)}">
+                        value: '${rangeStart}',
+                        </g:if>
+                        format:'Y-m-d'
                     }
             ),
             j('#rangeEnd').datetimepicker(
@@ -17,7 +20,10 @@
                         minDate: 0,
                         datepicker: true,
                         timepicker: false,
-                        format: 'Y/m/d'
+                        <g:if test="${!rangeEnd.equals(null)}">
+                        value: '${rangeEnd}',
+                        </g:if>
+                        format: 'Y-m-d'
                     }
             ),
             j('#startHour').datetimepicker(
@@ -25,6 +31,9 @@
                         minDate: 0,
                         datepicker: false,
                         step:30,
+                        <g:if test="${!start.equals(null)}">
+                        value: '${start}',
+                        </g:if>
                         format: 'H:i'
                     }
             ),
@@ -33,6 +42,9 @@
                         minDate: 0,
                         datepicker: false,
                         step:30,
+                        <g:if test="${!end.equals(null)}">
+                        value: '${end}',
+                        </g:if>
                         format: 'H:i'
                     }
             )

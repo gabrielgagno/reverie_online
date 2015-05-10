@@ -13,6 +13,13 @@
 </head>
 
 <body>
-    <g:render template="taskForm" />
+<div class="container-fluid">
+    <div class="row">
+        <g:form controller="jobs" action="doEditHabit" method="POST" class="form-horizontal" params="${[id: id]}">
+            <g:render template="habitForm" />
+        </g:form>
+    </div>
+</div>
+<g:render template="habitJs" />
 </body>
 </html>

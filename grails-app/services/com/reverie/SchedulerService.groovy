@@ -38,8 +38,10 @@ class SchedulerService {
             println(t.jobName)
         }
         Habit[] habits = Habit.findAllByOwner(owner)
-        //clear all subTasks
-        SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
+        //clear all subTasks of task
+        if(Task.findAllByOwner(owner).size()!=0) {
+            SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
+        }
         int scheduled = habits.length
         int totalNum = scheduled + tasks.length
         HashMap<String, Float> completionArray = new HashMap<String, Float>()
@@ -118,15 +120,6 @@ class SchedulerService {
             res = query.list(sort: "subTaskStart")
         }
         int i
-        /*
-        for(i=0;i<res.length;i++){
-            //TODO this
-            println(utilityService.overlapFinder(tStart, res[i]))
-            if(utilityService.overlapFinder(tStart, res[i])){
-                tStart = res[i].subTaskEnd
-                break
-            }
-        }*/
         for(i=0;i<res.length;i++){
             if(tStart.isBefore(res[i].subTaskStart)){
                 break;
