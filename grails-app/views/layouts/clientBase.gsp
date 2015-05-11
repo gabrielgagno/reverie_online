@@ -9,12 +9,10 @@
 <html>
 <head>
     <title><g:layoutTitle default="Reverie Online - Automated Task Scheduler" /></title>
-    <g:layoutHead />
-    <g:javascript library="application"/>
-    <g:javascript library="jquery" plugin="jquery"/>
-    <r:require modules="bootstrap"/>
-    <g:javascript plugin="twitter-bootstrap"/>
+    <g:javascript library="jquery"/>
+    <r:require modules="bootstrap, jquery"/>
     <r:layoutResources />
+    <g:layoutHead />
 </head>
 
 <body>
