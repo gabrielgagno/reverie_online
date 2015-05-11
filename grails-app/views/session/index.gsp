@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="fullcalendar.css"/>" />
     <g:javascript src="moment.min.js" />
     <g:javascript src="fullcalendar.js" />
+    <g:javascript src="jquery.classyslider.min.js" />
+    <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="jquery.classyslider.min.css" />" />
 </head>
 
 <body>
@@ -98,25 +100,61 @@
 
                 });
             </script>
-        </g:if>
-        <div id="fullCalModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                        <h4 id="modalType"></h4>
-                        <h3 id="modalTitle" class="modal-title"></h3>
-                        <h4 id="deadline"></h4>
-                    </div>
-                    <div id="modalBody" class="modal-body"></div>
-                    <div id="duration" class="modal-body"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <g:link controller="jobs" action="showJobPage" elementId="modalGuy" class="btn btn-primary">Go to Job</g:link>
+            <div id="fullCalModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                            <h4 id="modalType"></h4>
+                            <h3 id="modalTitle" class="modal-title"></h3>
+                            <h4 id="deadline"></h4>
+                        </div>
+                        <div id="modalBody" class="modal-body"></div>
+                        <div id="duration" class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <g:link controller="jobs" action="showJobPage" elementId="modalGuy" class="btn btn-primary">Go to Job</g:link>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </g:if>
+        <g:else>
+            <div class=jumbotron">
+                    <ul class="slider">
+                        <li>
+                            <img src="<g:resource dir="images/slider-img" file="P_20150512_060633.jpg"/>" />
+                        </li>
+                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060713.jpg"/>" /></li>
+                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060841.jpg"/>" /></li>
+                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060924.jpg"/>" /></li>
+                    </ul>
+            </div>
+            <div class="row col-lg-offset-3 col-lg-6">
+                <h4>Tired Planning your Day?</h4>
+                <h3>Let us help you.</h3>
+                <p class="text-justify">
+                    We are Reverie, the world's pioneering automated personal task scheduler. We are the experts in our field
+                    and we are at the forefront of research in automated task scheduling. We are also the first automated task scheduler
+                    to go commercial. We are continuously improving, and we need your help in doing that. You can help us by allowing us
+                    to help you organize your day. Together, we become partners in an endeavour like never before. join us now.
+                </p>
+            </div>
+            <script>
+                $(document).ready(
+                        function(){
+                            $('.slider').ClassySlider(
+                                    {
+                                        autoplay: true,
+                                        pause: true,
+                                        duration: 3000,
+                                        distance: 40
+                                    }
+                            );
+                        }
+                );
+            </script>
+        </g:else>
     </div>
 </body>
 </html>
