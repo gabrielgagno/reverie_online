@@ -134,6 +134,9 @@ class SchedulerService {
                 return false
             }
         }
+        if(tStart.isAfter(tasks[taskIndex].deadline)){
+            return false
+        }
         return true;
     }
 
