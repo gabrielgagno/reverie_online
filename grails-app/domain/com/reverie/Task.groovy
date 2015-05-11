@@ -8,13 +8,13 @@ class Task extends Job{
     double weight
     int numOperations
     float completionTime
-    LocalTime completionLocalTime
+    //LocalTime completionLocalTime
     float minOperationDuration
-    LocalTime minOpDurationLocalTime
+    //LocalTime minOpDurationLocalTime
     boolean hardDeadline
+    boolean done
 
     static hasMany = [subTaskList : SubTask]
-    static belongsTo = [owner:User]
     static constraints = {
     }
 

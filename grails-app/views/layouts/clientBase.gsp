@@ -29,7 +29,7 @@
                 <ul class="nav navbar-nav">
                     <li><g:link controller="session" action="index"><i class="glyphicon glyphicon-home"></i> Home</g:link></li>
                     <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> About</a></li>
-                    <li><a href="#"><i class="glyphicon glyphicon-registration-mark"></i> Sign Up</a></li>
+                    <li><g:link controller="session" action="signup" ><i class="glyphicon glyphicon-asterisk"></i> Sign Up</g:link></li>
                 </ul>
                 <g:form controller="session" action="login" method="post" class="navbar-form navbar-right">
                     <g:field type="text" placeholder="Username" name="uNameField" required="required" class="form-control"/>

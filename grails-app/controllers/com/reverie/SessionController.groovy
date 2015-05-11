@@ -16,9 +16,9 @@ class SessionController {
             habits = sessionService.getUserHabits(user)
             subTasks = sessionService.getUserSubTasks(user)
             subTaskSizeRedacted = subTasks.length - 1
-            for(SubTask st : subTasks){
-                println(st.motherTask.jobName + " " + st.subTaskStart.toString() + " " + st.subTaskEnd.toString())
-            }
+            //for(SubTask st : subTasks){
+                //println(st.motherTask.jobName + " " + st.subTaskStart.toString() + " " + st.subTaskEnd.toString())
+            //}
         }
         else{
             sessionInd = 0
@@ -67,6 +67,15 @@ class SessionController {
 
     def logout(){
         session.invalidate()
+        redirect(action: 'index', model:[isSession: 0])
+    }
+
+    def signup(){
+        render(view: 'signup', model: [isSession: 0])
+    }
+
+    def signupAction(String firstName, String lastName, String email, String pw, int priority, String userName){
+        sessionService.addUser(firstName, lastName, email, pw, priority, userName)
         redirect(action: 'index', model:[isSession: 0])
     }
 }

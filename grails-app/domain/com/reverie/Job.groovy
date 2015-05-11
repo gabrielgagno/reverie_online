@@ -4,6 +4,7 @@ abstract class Job {
     String id
     String jobName
     String jobNotes
+    static belongsTo = [owner:User]
     static constraints = {
 
     }

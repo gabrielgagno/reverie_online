@@ -1,6 +1,7 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.apache.catalina.users.AbstractUser
 
 @Transactional
 class SessionService {
@@ -18,14 +19,17 @@ class SessionService {
     }
 
     def getUserSubTasks(User owner){
+        println("CURRENT OWNER PUTANGINA: " + owner.firstName)
         def ownedTasks = Task.findAllByOwner(owner)
         def ownedHabits = Habit.findAllByOwner(owner)
-
-        def query = SubTask.where {
-            (inList("motherTask", ownedTasks) || inList("motherTask", ownedHabits))
+        def list = Job.findAllByOwner(owner)
+        if(list.size()==0){
+            return []
         }
-
-        return query.list(sort: "subTaskStart")
+        def query = SubTask.where {
+            motherTask in list
+        }
+        return query.find()
     }
 
     def saveSettings(String id, String firstName, String lastName, String email, String password, int priority){
@@ -44,5 +48,23 @@ class SessionService {
             user.completionTimeConstant = 2
         }
         user.save()
+    }
+
+    def addUser(String firstName, String lastName, String email, String password, int priority, String username){
+        User user = new User()
+        user.firstName = firstName
+        user.lastName = lastName
+        user.email = email
+        user.password = password
+        user.username = username
+        if(priority==1){
+            user.deadlineConstant = 2
+            user.completionTimeConstant = 1
+        }
+        else{
+            user.deadlineConstant = 1
+            user.completionTimeConstant = 2
+        }
+        user.save(failOnError: true)
     }
 }

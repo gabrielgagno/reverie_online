@@ -7,6 +7,7 @@ import org.joda.time.LocalDateTime
 class SchedulerService {
     def utilityService
     def reDraw(LocalDateTime datePointer, User owner){
+        println("REDRAWN")
         int i=0, j=0
         int index = 0
         /*
@@ -26,7 +27,7 @@ class SchedulerService {
                 datePointer = sTemp.subTaskEnd
             }
         }
-        Task[] tasksTemp = Task.findAllByOwner(owner, [sort: "weight"])
+        Task[] tasksTemp = Task.findAllByOwnerAndDone(owner, false, [sort: "weight"])
         def list = []
         tasksTemp.each {
             if(it.deadline.isAfter(datePointer)){
@@ -39,7 +40,7 @@ class SchedulerService {
         }
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks of task
-        if(Task.findAllByOwner(owner).size()!=0) {
+        if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
             SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
         }
         int scheduled = habits.length
@@ -133,9 +134,6 @@ class SchedulerService {
             if(tEnd.compareTo(res[i].subTaskStart)>0){
                 return false
             }
-        }
-        if(tStart.isAfter(tasks[taskIndex].deadline)){
-            return false
         }
         return true;
     }

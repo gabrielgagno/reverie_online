@@ -14,8 +14,8 @@ class UtilityService {
         //process competionTime and minOperationDuration
         LocalTime completionLocalTime
         LocalTime minOpDurationLocalTime
-        completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
-        minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
+        //completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
+        //minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
         if(completionTimeMinute==30){
             completionTimeHour+=0.5
         }
@@ -29,10 +29,10 @@ class UtilityService {
         t.jobNotes = jobNotes
         t.deadline = fmt.parseLocalDateTime(deadline)
         t.completionTime = completionTimeHour
-        t.completionLocalTime = completionLocalTime
+        //t.completionLocalTime = completionLocalTime
         t.minOperationDuration = minOperationDurationHour
-        t.minOpDurationLocalTime = minOpDurationLocalTime
-        t.save(flush:true)
+        //t.minOpDurationLocalTime = minOpDurationLocalTime
+        t.save(failOnError: true)
     }
 
     def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
@@ -85,7 +85,9 @@ class UtilityService {
 
     def computeWeights(tasks, int wx, int wy){
         for(Task t : tasks){
-            t.weight = weight(wx, wy, t.deadline.toDateTime().getMillis(), t.completionLocalTime.toDateTimeToday().getMillis())
+            def arr = floatToHoursMins(t.completionTime)
+            def allMinutes = arr[1] + (arr[0]*60000)
+            t.weight = weight(wx, wy, t.deadline.toDateTime().getMillis(), allMinutes)
             t.save()
         }
     }
@@ -190,9 +192,9 @@ class UtilityService {
         task.jobNotes = jobNotes
         task.deadline = fmt.parseLocalDateTime(deadline)
         task.completionTime = completionTimeHour
-        task.completionLocalTime = completionLocalTime
+        //task.completionLocalTime = completionLocalTime
         task.minOperationDuration = minOperationDurationHour
-        task.minOpDurationLocalTime = minOpDurationLocalTime
+        //task.minOpDurationLocalTime = minOpDurationLocalTime
         task.save(failOnError: true)
     }
 
