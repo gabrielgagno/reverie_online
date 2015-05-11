@@ -54,6 +54,7 @@
                                 j("#duration").html("Frequency: " + calEvent.freq);
                             }
                             j('#modalBody').html(calEvent.description);
+                            j('#modalGuy').attr("href", j('#modalGuy').attr("href") + "/" + calEvent.id);
                             j('#fullCalModal').modal('show');
                         },
                         events: [
@@ -70,6 +71,7 @@
                             </g:each>
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
+                                    tempId: '${it.id}',
                                     <g:if test="${it.motherTask instanceof com.reverie.Task}" >
                                     color: '#670D0D',
                                     eventType: 'Task',
@@ -109,7 +111,7 @@
                     <div id="duration" class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button class="btn btn-primary">Event Page</button>
+                        <g:link controller="jobs" action="showJobPage" elementId="modalGuy" class="btn btn-primary">Go to Job</g:link>
                     </div>
                 </div>
             </div>

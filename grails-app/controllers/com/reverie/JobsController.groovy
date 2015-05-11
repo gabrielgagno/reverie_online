@@ -99,5 +99,20 @@ class JobsController {
         schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         jobsList()
     }
+
+    def showJobPage(String id){
+        Job job = Job.findById(id)
+        if(job instanceof Task){
+            Task t = Task.findById(id)
+            DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm")
+            [isSession: 1, id: t.id, isHabit: 0, jobName: t.jobName, jobNotes: t.jobNotes, deadline: dateFmt.print(t.deadline), completionTime: t.completionTime, minOperationDuration: t.minOperationDuration]
+        }
+        else{
+            DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
+            DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
+            Habit h = Habit.findById(id)
+            [isSession: 1, id: h.id, isHabit: 1, jobName: h.jobName, jobNotes: h.jobNotes, from: dateFmt.print(h.rangeStart), to: dateFmt.print(h.rangeEnd), frequency: h.frequency]
+        }
+    }
     //fetch subtask
 }
