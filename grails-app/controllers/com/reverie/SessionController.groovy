@@ -3,6 +3,7 @@ package com.reverie
 class SessionController {
 
     def sessionService
+    def schedulerService
     def index(int errNo) {
         def sessionInd
         Task[] tasks

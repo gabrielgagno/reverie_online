@@ -19,7 +19,6 @@ class SessionService {
     }
 
     def getUserSubTasks(User owner){
-        println("CURRENT OWNER PUTANGINA: " + owner.firstName)
         def ownedTasks = Task.findAllByOwner(owner)
         def ownedHabits = Habit.findAllByOwner(owner)
         def list = Job.findAllByOwner(owner)
@@ -29,7 +28,7 @@ class SessionService {
         def query = SubTask.where {
             motherTask in list
         }
-        return query.find()
+        return query.findAll()
     }
 
     def saveSettings(String id, String firstName, String lastName, String email, String password, int priority){

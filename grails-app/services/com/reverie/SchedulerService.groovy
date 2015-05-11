@@ -41,7 +41,7 @@ class SchedulerService {
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks of task
         if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
-            SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwner(owner)])
+            SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwnerAndDone(owner, false)])
         }
         int scheduled = habits.length
         int totalNum = scheduled + tasks.length

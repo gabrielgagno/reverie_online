@@ -36,8 +36,14 @@
             </g:else>
             <h4 class="h4">Job Notes:</h4>
             <p>${jobNotes}</p>
-            <g:link controller="jobs" action="markAsDone" id="${id}" class="btn btn-success">Mark as Done</g:link>
+
             <g:if test="${isHabit==0}">
+                <g:if test="${done==true}">
+                    <p class="btn btn-default"><i class="glyphicon glyphicon-check"></i> Done</p>
+                </g:if>
+                <g:else>
+                    <g:link controller="jobs" action="markAsDone" id="${id}" class="btn btn-success">Mark as Done</g:link>
+                </g:else>
                 <g:link controller="jobs" action="editTask" class="btn btn-info" id="${id}">Edit</g:link>
                 <g:link controller="jobs" action="deleteTask" class="btn btn-danger" id="${id}">Delete</g:link>
             </g:if>

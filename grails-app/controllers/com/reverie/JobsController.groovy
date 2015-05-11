@@ -105,7 +105,7 @@ class JobsController {
         if(job instanceof Task){
             Task t = Task.findById(id)
             DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm")
-            [isSession: 1, id: t.id, isHabit: 0, jobName: t.jobName, jobNotes: t.jobNotes, deadline: dateFmt.print(t.deadline), completionTime: t.completionTime, minOperationDuration: t.minOperationDuration]
+            [isSession: 1, id: t.id, isHabit: 0, jobName: t.jobName, jobNotes: t.jobNotes, deadline: dateFmt.print(t.deadline), completionTime: t.completionTime, minOperationDuration: t.minOperationDuration, done: t.done]
         }
         else{
             DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
@@ -113,6 +113,15 @@ class JobsController {
             Habit h = Habit.findById(id)
             [isSession: 1, id: h.id, isHabit: 1, jobName: h.jobName, jobNotes: h.jobNotes, from: dateFmt.print(h.rangeStart), to: dateFmt.print(h.rangeEnd), frequency: h.frequency]
         }
+    }
+
+    def markAsDone(String id){
+        def t = Task.findById(id)
+        t.done = true
+        t.save(failOnError: true)
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        redirect(controller: 'session', action: 'index')
     }
     //fetch subtask
 }
