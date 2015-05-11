@@ -64,4 +64,9 @@ class SessionController {
         sessionService.saveSettings((String) session["id"], firstName, lastName, email, pw, priority)
         redirect(action: 'index', model:[isSession: 1])
     }
+
+    def logout(){
+        session.invalidate()
+        redirect(action: 'index', model:[isSession: 0])
+    }
 }
