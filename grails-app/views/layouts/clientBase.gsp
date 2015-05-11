@@ -53,9 +53,8 @@
                         </ul>
                     </li>
                     <li><g:link controller="session" action="settings"><i class="glyphicon glyphicon-cog"></i> Settings</g:link></li>
-                    <li></li>
                 </ul>
-                <p class="navbar-text pull-right"><g:link controller="session" action="logout" class="btn btn-sm btn-info">Logout</g:link></p>
+                <p class="navbar-form pull-right"><g:link controller="session" action="logout" class="btn btn-sm btn-info">Logout</g:link></p>
             </div>
         </g:elseif>
     </div>

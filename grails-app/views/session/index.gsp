@@ -5,7 +5,7 @@
   Time: 11:11 PM
 --%>
 
-<%@ page import="com.reverie.SubTask" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.reverie.Habit; com.reverie.SubTask" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta name="layout" content="clientBase" />
@@ -45,8 +45,21 @@
                         eventLimit: true,
                         allDaySlot: false,
                         events: [
+                            <g:each in="${tasks}">
+                                {
+                                    //deadlines
+                                    id: '${it.id}',
+                                    title: 'Deadline for ${it.jobName}',
+                                    start: '${it.deadline}',
+                                    end: '${it.deadline}',
+                                    color: '#670D0D'
+                                },
+                            </g:each>
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
+                                    <g:if test="${it.motherTask instanceof com.reverie.Task}" >
+                                    color: '#670D0D',
+                                    </g:if>
                                     id: '${it.motherTask.id}',
                                     title: '${it.motherTask.jobName}',
                                     start: '${it.subTaskStart.toString()}',
