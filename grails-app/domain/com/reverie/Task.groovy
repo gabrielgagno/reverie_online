@@ -9,7 +9,7 @@ class Task extends Job{
     int numOperations
     float completionTime
     //LocalTime completionLocalTime
-    float minOperationDuration
+    //float minOperationDuration
     //LocalTime minOpDurationLocalTime
     boolean hardDeadline
     boolean done

@@ -12,17 +12,16 @@ class JobsController {
     def schedulerService
 
     def newTask(){
-        render(view:'newTask', model:[id: "", isSession:1, jobName: "", jobNotes: "", deadline: "", completionHr:0, completionMin:0, minDivHr: 0, minDivMin:0])
+        render(view:'newTask', model:[id: "", isSession:1, jobName: "", jobNotes: "", deadline: "", completionHr:0, completionMin:0])
     }
 
     def newHabit(){
         render(view:'newHabit', model:[isSession:1])
     }
 
-    def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
-        println(completionTimeHour + " " + completionTimeMinute)
+    def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour){
         //deadline: YYYY/MM/DD HH:MM
-        utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour, completionTimeMinute, minOperationDurationHour, minOperationDurationMinute)
+        utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
         utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
         schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
@@ -47,16 +46,15 @@ class JobsController {
     def editTask(String id){
         def task = Task.findById(id)
         def cArr = utilityService.floatToHoursMins(task.completionTime)
-        def mDArr = utilityService.floatToHoursMins(task.minOperationDuration)
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
-        [id: task.id, isSession:1, jobName: task.jobName, jobNotes: task.jobNotes, deadline: fmt.print(task.deadline), completionHr:cArr[0], completionMin:cArr[1], minDivHr: mDArr[0], minDivMin:mDArr[1]]
+        [id: task.id, isSession:1, jobName: task.jobName, jobNotes: task.jobNotes, deadline: fmt.print(task.deadline), completionHr:cArr[0], completionMin:cArr[1]]
     }
 
-    def doEditTask(String idContainer, String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
+    def doEditTask(String idContainer, String jobName, String jobNotes, String deadline, int completionTimeHour){
         //delete subtasks
         def subTasks = SubTask.findAllByMotherTask(Task.findById(idContainer))
         SubTask.deleteAll(subTasks)
-        utilityService.editTask(idContainer, jobName, jobNotes, deadline, completionTimeHour, completionTimeMinute, minOperationDurationHour, minOperationDurationMinute)
+        utilityService.editTask(idContainer, jobName, jobNotes, deadline, completionTimeHour)
         utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
         schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
@@ -105,7 +103,7 @@ class JobsController {
         if(job instanceof Task){
             Task t = Task.findById(id)
             DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm")
-            [isSession: 1, id: t.id, isHabit: 0, jobName: t.jobName, jobNotes: t.jobNotes, deadline: dateFmt.print(t.deadline), completionTime: t.completionTime, minOperationDuration: t.minOperationDuration, done: t.done]
+            [isSession: 1, id: t.id, isHabit: 0, jobName: t.jobName, jobNotes: t.jobNotes, deadline: dateFmt.print(t.deadline), completionTime: t.completionTime, done: t.done]
         }
         else{
             DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")

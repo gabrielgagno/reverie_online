@@ -24,7 +24,6 @@
                 <p>
                     <span style="font-weight: bold;">Due Date: </span>${deadline}<br />
                     <span style="font-weight: bold;">Completion Time: </span>${completionTime} hours<br />
-                    <span style="font-weight: bold;">Division of at most: </span>${minOperationDuration} hours<br />
                 </p>
             </g:if>
             <g:else>

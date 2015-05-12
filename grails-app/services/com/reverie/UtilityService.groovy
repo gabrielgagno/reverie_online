@@ -10,18 +10,7 @@ import org.joda.time.format.DateTimeFormatter
 
 @Transactional
 class UtilityService {
-    def addTask(User owner, String jobName, String jobNotes, String deadline, float completionTimeHour, int completionTimeMinute, float minOperationDurationHour, int minOperationDurationMinute) {
-        //process competionTime and minOperationDuration
-        LocalTime completionLocalTime
-        LocalTime minOpDurationLocalTime
-        //completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
-        //minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
-        if(completionTimeMinute==30){
-            completionTimeHour+=0.5
-        }
-        if(minOperationDurationMinute==30){
-            minOperationDurationHour+=0.5
-        }
+    def addTask(User owner, String jobName, String jobNotes, String deadline, float completionTimeHour) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
         def t = new Task()
         t.owner = owner
@@ -30,7 +19,7 @@ class UtilityService {
         t.deadline = fmt.parseLocalDateTime(deadline)
         t.completionTime = completionTimeHour
         //t.completionLocalTime = completionLocalTime
-        t.minOperationDuration = minOperationDurationHour
+        //t.minOperationDuration = minOperationDurationHour
         //t.minOpDurationLocalTime = minOpDurationLocalTime
         t.save(failOnError: true)
     }
@@ -175,17 +164,7 @@ class UtilityService {
         return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
     }
 
-    def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour, int completionTimeMinute, int minOperationDurationHour, int minOperationDurationMinute){
-        LocalTime completionLocalTime
-        LocalTime minOpDurationLocalTime
-        completionLocalTime = new LocalTime((int) completionTimeHour, completionTimeMinute)
-        minOpDurationLocalTime = new LocalTime((int) minOperationDurationHour, minOperationDurationMinute)
-        if(completionTimeMinute==30){
-            completionTimeHour+=0.5
-        }
-        if(minOperationDurationMinute==30){
-            minOperationDurationHour+=0.5
-        }
+    def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour){
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
         def task = Task.findById(id)
         task.jobName = jobName
@@ -193,7 +172,6 @@ class UtilityService {
         task.deadline = fmt.parseLocalDateTime(deadline)
         task.completionTime = completionTimeHour
         //task.completionLocalTime = completionLocalTime
-        task.minOperationDuration = minOperationDurationHour
         //task.minOpDurationLocalTime = minOpDurationLocalTime
         task.save(failOnError: true)
     }

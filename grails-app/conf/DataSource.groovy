@@ -5,8 +5,11 @@ dataSource {
     //driverClassName = "org.postgresql.Driver" //postgresql
     driverClassName = "com.mysql.jdbc.Driver" //mysql
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
-    username = "root"
-    password = ""
+    username = "root" //mysql
+    password = "" //mysql
+    //username = "kbymizohdshdgj"
+    //password = "sDGsOUPJY5DCdawtMSZ-nmXAU-"
+
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -23,6 +26,7 @@ environments {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
             //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
+            //url = "jdbc:postgres://kbymizohdshdgj:sDGsOUPJY5DCdawtMSZ-nmXAU-@ec2-50-19-233-111.compute-1.amazonaws.com:5432/dcq98mda5r95fb" //postgres-heroku
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
@@ -31,6 +35,7 @@ environments {
             dbCreate = "update"
             //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
             //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
+            //url = "jdbc:postgres://kbymizohdshdgj:sDGsOUPJY5DCdawtMSZ-nmXAU-@ec2-50-19-233-111.compute-1.amazonaws.com:5432/dcq98mda5r95fb" //postgres-heroku
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
         }
     }
@@ -40,6 +45,7 @@ environments {
             //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
             //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
             url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            //url = "jdbc:postgres://kbymizohdshdgj:sDGsOUPJY5DCdawtMSZ-nmXAU-@ec2-50-19-233-111.compute-1.amazonaws.com:5432/dcq98mda5r95fb" //postgres-heroku
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true
