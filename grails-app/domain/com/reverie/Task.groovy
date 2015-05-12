@@ -6,7 +6,6 @@ import org.joda.time.LocalTime
 class Task extends Job{
     LocalDateTime deadline
     double weight
-    int numOperations
     float completionTime
     //LocalTime completionLocalTime
     //float minOperationDuration
