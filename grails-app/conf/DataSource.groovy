@@ -3,12 +3,11 @@ dataSource {
     jmxExport = true
     //driverClassName = "org.h2.Driver" //h2
     //driverClassName = "org.postgresql.Driver" //postgresql
+    //dialect = "org.hibernate.dialect.PostgreSQLDialect" //postgresql
     driverClassName = "com.mysql.jdbc.Driver" //mysql
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
-    username = "root" //mysql
-    password = "" //mysql
-    //username = "kbymizohdshdgj"
-    //password = "sDGsOUPJY5DCdawtMSZ-nmXAU-"
+    username = "reverie_user" //mysql
+    password = "graduation" //mysql
 
 }
 hibernate {
