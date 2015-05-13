@@ -13,6 +13,13 @@
 </head>
 
 <body>
+    <div class="row">
+        <p class="col-lg-offset-1 col-lg-6 text-justify alert-info">
+            Habits are those tasks that need to be and are necessarily fixed to a certain point of time and duration of time. The main difference is that
+            habits don't have deadlines and that they could routinely repeat in a regular interval (daily, weekly, etc). Examples of this are sleeping habits,
+            fixed eating schedules, meetings that cannot (and should not be) moved, and other routine activities done at a certain point of day. See <g:link controller="jobs" action="addTask">Tasks</g:link> for comparison.
+        </p>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <g:form controller="jobs" action="addHabit" method="POST" class="form-horizontal">

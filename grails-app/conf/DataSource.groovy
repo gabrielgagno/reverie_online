@@ -24,16 +24,16 @@ environments {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
+            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            //url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
         }
     }
     test {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
+            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            //url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
         }
     }
     production {

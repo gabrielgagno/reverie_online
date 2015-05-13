@@ -15,6 +15,12 @@
 <body>
     <div class="container-fluid">
         <div class="row">
+            <p class="col-lg-offset-1 col-lg-6 text-justify alert-info">
+                In this study, Tasks are the jobs that has a deadline and a completion time. These are the ones expected to be automatically scheduled
+                by this application. Examples of this include writing a paper or finishing an assignment before a particular deadline. See <g:link controller="jobs" action="addHabit">Habits</g:link> for comparison.
+            </p>
+        </div>
+        <div class="row">
             <g:form controller="jobs" action="addTask" method="POST" class="form-horizontal">
                 <g:render template="taskForm" />
             </g:form>
