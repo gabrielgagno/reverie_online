@@ -121,5 +121,10 @@ class JobsController {
         schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         redirect(controller: 'session', action: 'index')
     }
-    //fetch subtask
+
+    def reShuffle(){
+        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        redirect(controller: 'session', action: 'index')
+    }
 }

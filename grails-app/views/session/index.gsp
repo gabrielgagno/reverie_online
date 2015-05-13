@@ -27,6 +27,7 @@
 <body>
     <div class="container-fluid">
         <g:if test="${isSession==1}">
+            <g:link controller="jobs" action="reShuffle" class="btn btn-success">Reshuffle</g:link>
             <div id="calends" class="col-lg-offset-2 col-lg-8">
 
             </div>
