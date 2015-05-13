@@ -12,8 +12,8 @@ class SchedulerService {
         Random random = new Random()
         int i=0, j=0
         int index = 0
-        float complTime
-        float timeBeforeDeadline
+        int complTime
+        int timeBeforeDeadline
         float upperRandCeil
         //move datepointer to the end of first habit encountered
         SubTask[] subHabitsTemp = utilityService.getAllSubHabits(owner)
@@ -61,7 +61,13 @@ class SchedulerService {
             }
             complTime = tasks[index].completionTime
             timeBeforeDeadline = new Duration(datePointer.toDateTime(DateTimeZone.UTC), tasks[index].deadline.toDateTime(DateTimeZone.UTC)).getStandardHours()
-            upperRandCeil = (complTime + timeBeforeDeadline)/2
+            SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
+            println("YAMMY")
+            for(SubTask st : subTasks){
+                println(st.motherTask.jobName)
+            }
+            ArrayList<LocalDateTime> freeTimes = utilityService.findFreeTimes(timeBeforeDeadline, datePointer, subTasks)
+            upperRandCeil = (complTime + freeTimes.size())/2
             println("COMPLTIME: " + complTime + " TIMEBEFREDEAD: " + timeBeforeDeadline + " upperrand: " + upperRandCeil)
             while(completionArray.get(tasks[index].id)>0){
                 int x = random.nextInt((int) upperRandCeil)

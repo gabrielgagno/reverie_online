@@ -1,6 +1,8 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.joda.time.DateTimeZone
+import org.joda.time.Duration
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
@@ -176,7 +178,7 @@ class UtilityService {
         task.save(failOnError: true)
     }
 
-    def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+    def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
         def habit = Habit.findById(id)
@@ -191,23 +193,58 @@ class UtilityService {
         LocalDate tempStart = habit.rangeStart
         int minutes = Minutes.minutesBetween(habit.start, habit.end).getMinutes()
         println(minutes)
-        while(!tempStart.isAfter(habit.rangeEnd)){
+        while (!tempStart.isAfter(habit.rangeEnd)) {
             addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))
-            if(frequency.equals("ONCE")){
+            if (frequency.equals("ONCE")) {
                 break
-            }
-            else if(frequency.equals("DAILY")){
+            } else if (frequency.equals("DAILY")) {
                 tempStart = tempStart.plusDays(1)
-            }
-            else if(frequency.equals("WEEKLY")){
+            } else if (frequency.equals("WEEKLY")) {
                 tempStart = tempStart.plusWeeks(1)
-            }
-            else if(frequency.equals("MONTHLY")){
+            } else if (frequency.equals("MONTHLY")) {
                 tempStart = tempStart.plusMonths(1)
-            }
-            else if(frequency.equals("ANNUALLY")){
+            } else if (frequency.equals("ANNUALLY")) {
                 tempStart = tempStart.plusYears(1)
             }
         }
+    }
+
+    def findFreeTimes(int timeBeforeDeadline, LocalDateTime datePointer, SubTask[] subTasks){
+        ArrayList<LocalDateTime> arrayList = new ArrayList<LocalDateTime>()
+        arrayList.add(datePointer)
+        for(SubTask st : subTasks){
+            if(st.motherTask instanceof Task){
+                println(st.motherTask.jobName + " " + "task")
+            }
+            else{
+                println(st.motherTask.jobName + " " + "habit")
+            }
+        }
+        for(int i=0;i<timeBeforeDeadline-1;i++){
+            datePointer = datePointer.plusHours(1)
+            boolean isFree = true
+            int j=0
+            for(j=0;j<subTasks.length;j++){
+                if(subTasks[j].subTaskStart.isAfter(datePointer)){
+                    break;
+                }
+                if(datePointer.equals(subTasks[j].subTaskStart)){
+                    //i+=duration
+                    isFree = false
+                    println("NEW DURR: " + new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours())
+                    i+=new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
+                    datePointer.plusHours((int) new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours())
+                    break
+                }
+            }
+            if(isFree){
+                arrayList.add(datePointer)
+            }
+        }
+        println("ARRAY PUTA " + timeBeforeDeadline)
+        for(LocalDateTime ldt : arrayList){
+            println(ldt.toString())
+        }
+        return arrayList
     }
 }
