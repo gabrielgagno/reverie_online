@@ -95,6 +95,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
+        grails.serverURL = "http://iskolargab.s43.eatj.com/reverie" //setup for eatj
         // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
