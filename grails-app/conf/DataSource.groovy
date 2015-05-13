@@ -8,10 +8,6 @@ dataSource {
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
     username = "reverie_user"
     password = "graduation"
-    //username = "iskolargab" //mysql
-    //password = "r@kssguplb" //mysql
-    //username = "adminNVCwQDX" //mysql openshift
-    //password = "PrinlTaaFc_C" //mysql openshift
 
 }
 hibernate {
@@ -28,38 +24,24 @@ environments {
         dataSource {
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
-            //url = "jdbc:postgres://kbymizohdshdgj:sDGsOUPJY5DCdawtMSZ-nmXAU-@ec2-50-19-233-111.compute-1.amazonaws.com:5432/dcq98mda5r95fb" //postgres-heroku
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            //url = "jdbc:mysql://localhost:3307/iskolargab?autoReconnect=true" //mysql
-            //url = "jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/reverie"
+            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
         }
     }
     test {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            //url = "jdbc:postgresql://localhost:5432/reverie_db" //postgresql
-            //url = "jdbc:postgres://kbymizohdshdgj:sDGsOUPJY5DCdawtMSZ-nmXAU-@ec2-50-19-233-111.compute-1.amazonaws.com:5432/dcq98mda5r95fb" //postgres-heroku
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            //url = "jdbc:mysql://localhost:3307/iskolargab?autoReconnect=true"
-            //url = "jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/reverie"
+            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
         }
     }
     production {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            //heroku specific settings
-            driverClassName = "org.postgresql.Driver"
-            dialect = "org.hibernate.dialect.PostgreSQLDialect"
-            uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
-
-            url = "jdbc:postgresql://" + uri.host + ":" + uri.port + uri.path
-            username = uri.userInfo.split(":")[0]
-            password = uri.userInfo.split(":")[1]
-            //end of heroku settings
+            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
+            url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
                jmxEnabled = true
