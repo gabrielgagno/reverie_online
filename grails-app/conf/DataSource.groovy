@@ -6,8 +6,8 @@ dataSource {
     //dialect = "org.hibernate.dialect.PostgreSQLDialect" //postgresql
     driverClassName = "com.mysql.jdbc.Driver" //mysql
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
-    username = "reverie_user"
-    password = "graduation"
+    //username = "reverie_user"
+    //password = "graduation"
 
 }
 hibernate {
