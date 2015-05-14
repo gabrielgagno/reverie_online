@@ -23,7 +23,7 @@
     <div class="form-group">
         <label class="control-label col-lg-4" for="completionTimeHour">Completion Time: </label>
         <div class="input-group">
-            <g:field type="number" name="completionTimeHour" id="completionTimeHour" class="form-control input-md" min="0" placeholder="HH" required="required" value="${completionHr}"/>
+            <g:field type="number" name="completionTimeHour" id="completionTimeHour" class="form-control input-md" min="1" placeholder="HH" required="required" value="${completionHr}"/>
             <span class="input-group-btn" style="width:0px;"></span>
         </div>
     </div>
