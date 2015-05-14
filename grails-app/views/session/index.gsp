@@ -5,7 +5,7 @@
   Time: 11:11 PM
 --%>
 
-<%@ page import="com.reverie.Task; com.reverie.Habit; com.reverie.SubTask" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.joda.time.LocalDateTime; com.reverie.Task; com.reverie.Habit; com.reverie.SubTask" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta name="layout" content="clientBase" />
@@ -27,6 +27,7 @@
 <body>
     <div class="container-fluid">
         <g:if test="${isSession==1}">
+            <p>Today is ${time}</p>
             <g:link controller="jobs" action="reShuffle" class="btn btn-success">Reshuffle</g:link>
             <div id="calends" class="col-lg-offset-2 col-lg-8">
 

@@ -1,6 +1,7 @@
 package com.reverie
 
 import grails.transaction.Transactional
+import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.Duration
 import org.joda.time.LocalDate
@@ -9,6 +10,7 @@ import org.joda.time.LocalTime
 import org.joda.time.Minutes
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import org.joda.time.tz.FixedDateTimeZone
 
 @Transactional
 class UtilityService {
@@ -88,7 +90,8 @@ class UtilityService {
     }
 
     def createDatePointer(){
-        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
+        return LocalDateTime.now().plusHours(13).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //only for testing in PH purposes
+        //return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //real deal should be fixed
     }
 
     def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart){
@@ -144,8 +147,9 @@ class UtilityService {
     }
 
     def getAllSubHabits(User subHabitOwner){
-        if(Habit.list().size()==0){
-            return []
+        SubTask[] emptyArr
+        if(Habit.findAllByOwner(subHabitOwner).size()==0){
+            return emptyArr
         }
         else {
             def query = SubTask.where {

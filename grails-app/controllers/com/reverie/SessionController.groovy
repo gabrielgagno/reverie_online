@@ -4,6 +4,7 @@ class SessionController {
 
     def sessionService
     def schedulerService
+    def utilityService
     def index(int errNo) {
         def sessionInd
         Task[] tasks
@@ -32,7 +33,8 @@ class SessionController {
             render(view:'index', model:[isSession:sessionInd, error:errNo])
         }
         else{
-            render(view:'index', model:[isSession:sessionInd, tasks: tasks, habits: habits, subTasks: subTasks, len: subTaskSizeRedacted])
+            def time = utilityService.createDatePointer().toString()
+            render(view:'index', model:[isSession:sessionInd, tasks: tasks, habits: habits, subTasks: subTasks, len: subTaskSizeRedacted, time: time])
         }
     }
 

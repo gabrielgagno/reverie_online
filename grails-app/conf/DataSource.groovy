@@ -6,8 +6,8 @@ dataSource {
     //dialect = "org.hibernate.dialect.PostgreSQLDialect" //postgresql
     driverClassName = "com.mysql.jdbc.Driver" //mysql
     dialect = "org.hibernate.dialect.MySQL5InnoDBDialect" //mysql
-    //username = "reverie_user"
-    //password = "graduation"
+    username = "reverie_user"
+    password = "graduation"
 
 }
 hibernate {
@@ -41,16 +41,15 @@ environments {
             //jelastic
             //dbCreate = "update"
             //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
-            //url = "jdbc:mysql://localhost/reverie_db?useUnicode=yes&characterEncoding=UTF-8" //mysql
-            //url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db" //mysql-jelastic
-            //end of jelastic
-            //openshift
             dbCreate = "update"
-            driverClassName = "org.postgresql.Driver"
-            uri = new URI(System.env.OPENSHIFT_POSTGRESQL_DB_URL)
-            url = "jdbc:mysql://"+uri.host+uri.path+"/"+System.env.OPENSHIFT_APP_NAME
-            username = System.env.OPENSHIFT_POSTGRESQL_DB_USERNAME
-            password = System.env.OPENSHIFT_POSTGRESQL_DB_PASSWORD
+            //driverClassName = 'com.mysql.jdbc.Driver'
+            String host = System.getenv('OPENSHIFT_MYSQL_DB_HOST')
+            String port = System.getenv('OPENSHIFT_MYSQL_DB_PORT')
+            String dbName = System.getenv('OPENSHIFT_APP_NAME')
+            url = "jdbc:mysql://$host:$port/$dbName"
+            username = System.getenv('OPENSHIFT_MYSQL_DB_USERNAME')
+            password = System.getenv('OPENSHIFT_MYSQL_DB_PASSWORD')
+
             //end of openshift
             properties {
                // See http://grails.org/doc/latest/guide/conf.html#dataSource for documentation
