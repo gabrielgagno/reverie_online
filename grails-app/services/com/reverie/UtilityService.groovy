@@ -231,7 +231,6 @@ class UtilityService {
                 if(datePointer.equals(subTasks[j].subTaskStart)){
                     //i+=duration
                     isFree = false
-                    println("NEW DURR: " + new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours())
                     i+=new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
                     datePointer.plusHours((int) new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours())
                     break
@@ -241,7 +240,6 @@ class UtilityService {
                 arrayList.add(datePointer)
             }
         }
-        println("ARRAY PUTA " + timeBeforeDeadline)
         for(LocalDateTime ldt : arrayList){
             println(ldt.toString())
         }

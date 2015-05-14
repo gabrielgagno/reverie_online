@@ -69,7 +69,6 @@
                                     description: '${it.jobNotes}',
                                     eventDL: '${((com.reverie.Task) it).deadline}',
                                     start: '${it.deadline}',
-                                    end: '${it.deadline}',
                                     color: '#670D0D'
                                 },
                             </g:each>
