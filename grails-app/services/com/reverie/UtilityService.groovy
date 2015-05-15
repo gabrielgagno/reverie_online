@@ -61,10 +61,10 @@ class UtilityService {
             println("EH")
             tempEh = tempEh.minusHours(12)
         }*/
-        int minutes = Math.abs(Minutes.minutesBetween(tempEh.toDateTimeToday(), tempSh.toDateTimeToday()).getMinutes())
+        int minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
         println(minutes)
         while(!tempStart.isAfter(re)){
-            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(1440 - minutes))
+            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
             if(frequency.equals("ONCE")){
                 break
             }

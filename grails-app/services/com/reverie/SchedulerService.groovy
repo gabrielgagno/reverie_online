@@ -72,7 +72,7 @@ class SchedulerService {
             while(completionArray.get(tasks[index].id)>0){
                 int x = random.nextInt((int) upperRandCeil)
                 println("CURR DATE POINTER: " + datePointer)
-                def randomizedDatePointer = datePointer.plusHours(x)
+                def randomizedDatePointer = freeTimes.get(x)
                 println("RAND DATE POINTER: " + randomizedDatePointer)
                 println("X: " + x)
                 if(fit(owner, randomizedDatePointer, timeArray)){
