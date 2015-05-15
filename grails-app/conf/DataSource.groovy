@@ -38,11 +38,14 @@ environments {
     }
     production {
         dataSource {
-            //jelastic
             //dbCreate = "update"
             //url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE" //h2
             dbCreate = "update"
             //driverClassName = 'com.mysql.jdbc.Driver'
+            //jelastic
+            //url = "jdbc:mysql://mysql23791-reverie.jelastic.skali.net/reverie_db"
+
+            //openshift
             String host = System.getenv('OPENSHIFT_MYSQL_DB_HOST')
             String port = System.getenv('OPENSHIFT_MYSQL_DB_PORT')
             String dbName = System.getenv('OPENSHIFT_APP_NAME')

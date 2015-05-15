@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.Duration
+import org.joda.time.Hours
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
@@ -35,6 +36,8 @@ class UtilityService {
         LocalDate re = dateFmt.parseLocalDate(rangeEnd)
         LocalTime sh = timeFmt.parseLocalTime(startHour)
         LocalTime eh = timeFmt.parseLocalTime(endHour)
+        println(sh.toString())
+        println(eh.toString())
         Habit h = new Habit()
         h.owner = owner
         h.jobName = jobName
@@ -46,10 +49,22 @@ class UtilityService {
         h.frequency = frequency
         h.save()
         LocalDate tempStart = rs
-        int minutes = Minutes.minutesBetween(sh, eh).getMinutes()
+        LocalTime tempSh = sh
+        LocalTime tempEh = eh
+        /*
+        if(sh.getHourOfDay()>12){
+            println("SH")
+            tempSh = tempSh.minusHours(12)
+        }
+        println(tempSh.toString())
+        if(eh.getHourOfDay()>12){
+            println("EH")
+            tempEh = tempEh.minusHours(12)
+        }*/
+        int minutes = Math.abs(Minutes.minutesBetween(tempEh.toDateTimeToday(), tempSh.toDateTimeToday()).getMinutes())
         println(minutes)
         while(!tempStart.isAfter(re)){
-            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
+            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(1440 - minutes))
             if(frequency.equals("ONCE")){
                 break
             }
@@ -90,8 +105,8 @@ class UtilityService {
     }
 
     def createDatePointer(){
-        return LocalDateTime.now().plusHours(13).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //only for testing in PH purposes
-        //return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //real deal should be fixed
+        //return LocalDateTime.now().plusHours(13).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //only for testing in PH purposes
+        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //real deal should be fixed
     }
 
     def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart){
