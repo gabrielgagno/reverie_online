@@ -1,6 +1,9 @@
 package com.reverie
 
 import grails.plugin.jodatime.binding.DateTimeConverter
+import org.joda.time.DateTimeZone
+import org.joda.time.Duration
+import org.joda.time.Hours
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -21,9 +24,24 @@ class JobsController {
 
     def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour){
         //deadline: YYYY/MM/DD HH:MM
-        utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
-        utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
-        schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        def datePtr = utilityService.createDatePointer()
+        println(datePtr.toString())
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
+        def dLine = fmt.parseLocalDateTime(deadline)
+        def timeBeforeDeadline = new Duration(datePtr.toDateTime(DateTimeZone.UTC), dLine.toDateTime(DateTimeZone.UTC)).getStandardHours()
+        SubTask[] x = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), [sort: "subTaskStart"])
+        def arr = utilityService.findFreeTimes((int) timeBeforeDeadline, datePtr, x)
+        int freeTimes = arr.size()
+        println(timeBeforeDeadline)
+        println(completionTimeHour)
+        if(freeTimes<completionTimeHour){
+            flash.message = "Deadline is too close. Please adjust some of your other tasks or habits."
+        }
+        else{
+            utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
+            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+        }
         //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
         redirect(controller: 'session', action: 'index')
     }

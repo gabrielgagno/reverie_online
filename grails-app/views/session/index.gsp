@@ -27,7 +27,11 @@
 <body>
     <div class="container-fluid">
         <g:if test="${isSession==1}">
-            <p>Today is ${time}</p>
+            <div class="col-lg-12">
+                <p class="text-center alert-danger">
+                    <g:if test="${flash.message!=null}">${flash.message}</g:if>
+                </p>
+            </div>
             <g:link controller="jobs" action="reShuffle" class="btn btn-success">Reshuffle</g:link>
             <div id="calends" class="col-lg-offset-2 col-lg-8">
 

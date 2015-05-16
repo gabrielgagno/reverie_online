@@ -247,7 +247,7 @@ class UtilityService {
                 println(st.motherTask.jobName + " " + "habit")
             }
         }
-        for(int i=0;i<timeBeforeDeadline-1;i++){
+        for(int i=1;i<timeBeforeDeadline;i++){
             datePointer = datePointer.plusHours(1)
             boolean isFree = true
             int j=0
@@ -258,15 +258,19 @@ class UtilityService {
                 if(datePointer.equals(subTasks[j].subTaskStart)){
                     //i+=duration
                     isFree = false
-                    i+=new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
-                    datePointer.plusHours((int) new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours())
+                    int dur = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
+                    println(dur)
+                    i+= dur
+                    datePointer = datePointer.plusHours(dur)
                     break
                 }
             }
             if(isFree){
+                println("i in freetime: " + i + " " + datePointer)
                 arrayList.add(datePointer)
             }
         }
+        println("FREETIMES")
         for(LocalDateTime ldt : arrayList){
             println(ldt.toString())
         }
