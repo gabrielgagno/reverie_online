@@ -238,39 +238,27 @@ class UtilityService {
 
     def findFreeTimes(int timeBeforeDeadline, LocalDateTime datePointer, SubTask[] subTasks){
         ArrayList<LocalDateTime> arrayList = new ArrayList<LocalDateTime>()
-        arrayList.add(datePointer)
-        for(SubTask st : subTasks){
-            if(st.motherTask instanceof Task){
-                println(st.motherTask.jobName + " " + "task")
-            }
-            else{
-                println(st.motherTask.jobName + " " + "habit")
-            }
-        }
-        for(int i=1;i<timeBeforeDeadline;i++){
-            datePointer = datePointer.plusHours(1)
+        for(int i=0;i<timeBeforeDeadline;i++){
+            def tempPointer = datePointer.plusHours(i)
             boolean isFree = true
             int j=0
             for(j=0;j<subTasks.length;j++){
-                if(subTasks[j].subTaskStart.isAfter(datePointer)){
+                if(subTasks[j].subTaskStart.isAfter(tempPointer)){
                     break;
                 }
-                if(datePointer.equals(subTasks[j].subTaskStart)){
+                if(tempPointer.equals(subTasks[j].subTaskStart)){
                     //i+=duration
                     isFree = false
                     int dur = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
                     println(dur)
                     i+= dur
-                    datePointer = datePointer.plusHours(dur)
                     break
                 }
             }
             if(isFree){
-                println("i in freetime: " + i + " " + datePointer)
-                arrayList.add(datePointer)
+                arrayList.add(tempPointer)
             }
         }
-        println("FREETIMES")
         for(LocalDateTime ldt : arrayList){
             println(ldt.toString())
         }

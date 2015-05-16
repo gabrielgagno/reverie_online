@@ -34,6 +34,7 @@ class JobsController {
         int freeTimes = arr.size()
         println(timeBeforeDeadline)
         println(completionTimeHour)
+        println("FREETIMES IN JOBSCONTROOLER: " + freeTimes)
         if(freeTimes<completionTimeHour){
             flash.message = "Deadline is too close. Please adjust some of your other tasks or habits."
         }
