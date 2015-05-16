@@ -36,7 +36,8 @@ class SchedulerService {
         Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks of task
         if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
-            SubTask.executeUpdate("delete from SubTask st where st.motherTask in (:tasks)", [tasks: Task.findAllByOwnerAndDone(owner, false)])
+            def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
+            SubTask.deleteAll(sts)
         }
         int scheduled = 0
         int totalNum = tasks.length
@@ -62,7 +63,6 @@ class SchedulerService {
             complTime = tasks[index].completionTime
             timeBeforeDeadline = new Duration(datePointer.toDateTime(DateTimeZone.UTC), tasks[index].deadline.toDateTime(DateTimeZone.UTC)).getStandardHours()
             SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
-            println("YAMMY")
             for(SubTask st : subTasks){
                 println(st.motherTask.jobName)
             }

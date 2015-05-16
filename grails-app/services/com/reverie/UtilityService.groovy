@@ -47,7 +47,7 @@ class UtilityService {
         h.start = sh
         h.end = eh
         h.frequency = frequency
-        h.save()
+        h.save(failOnError: true)
         LocalDate tempStart = rs
         LocalTime tempSh = sh
         LocalTime tempEh = eh
@@ -61,7 +61,15 @@ class UtilityService {
             println("EH")
             tempEh = tempEh.minusHours(12)
         }*/
-        int minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
+        int minutes
+        println(eh.toString())
+        println(eh.plusMinutes(1440).toString())
+        if(sh.isBefore(eh)){
+            minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
+        }
+        else{
+            minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
+        }
         println(minutes)
         while(!tempStart.isAfter(re)){
             addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
