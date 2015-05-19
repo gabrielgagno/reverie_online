@@ -218,7 +218,15 @@ class UtilityService {
         habit.frequency = frequency
         habit.save(failOnError: true)
         LocalDate tempStart = habit.rangeStart
-        int minutes = Minutes.minutesBetween(habit.start, habit.end).getMinutes()
+        int minutes
+        println(habit.end.toString())
+        println(habit.end.plusMinutes(1440).toString())
+        if(habit.start.isBefore(habit.end)){
+            minutes = Math.abs(Minutes.minutesBetween(habit.end, habit.start).getMinutes())
+        }
+        else{
+            minutes = Math.abs(Minutes.minutesBetween(habit.end.toDateTimeToday().toLocalDateTime().plusDays(1), habit.start.toDateTimeToday().toLocalDateTime()).getMinutes())
+        }
         println(minutes)
         while (!tempStart.isAfter(habit.rangeEnd)) {
             addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))

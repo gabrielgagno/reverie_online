@@ -14,6 +14,9 @@ class UrlMappings {
         "/new/task"(controller: "jobs", action: "newTask")
         "/new/habit"(controller: "jobs", action: "newHabit")
         "/edit/task"(controller: "jobs", action: "editTask")
+        "/edit/habit"(controller: "jobs", action: "editHabit")
+        "/delete/task"(controller: "jobs", action: "deleteTask")
+        "/delete/habit"(controller: "jobs", action: "deleteHabit")
         "500"(view:'/error')
         "404"(view:'notFound')
 	}
