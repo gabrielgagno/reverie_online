@@ -18,6 +18,9 @@
         </g:else>
     </title>
     <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="fullcalendar.css"/>" />
+    <g:if test="${isSession==0}">
+        <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="cover.css"/>" />
+    </g:if>
     <g:javascript src="moment.min.js" />
     <g:javascript src="fullcalendar.js" />
     <g:javascript src="jquery.classyslider.min.js" />
@@ -125,40 +128,28 @@
             </div>
         </g:if>
         <g:else>
-            <div class=jumbotron">
-                    <ul class="slider">
-                        <li>
-                            <img src="<g:resource dir="images/slider-img" file="P_20150512_060633.jpg"/>" />
-                        </li>
-                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060713.jpg"/>" /></li>
-                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060841.jpg"/>" /></li>
-                        <li><img src="<g:resource dir="images/slider-img" file="P_20150512_060924.jpg"/>" /></li>
-                    </ul>
+            <div class="site-wrapper">
+                <div class="site-wrapper-inner">
+                    <div class="cover-container">
+                        <div class="inner cover">
+                            <h1 class="cover-heading">Tired of Planning your Day?</h1>
+                            <h3>Let us help you out.</h3>
+                            <p class="lead">
+                                We are Reverie, the world's pioneering automated personal task scheduler. We are the experts in our field
+                                and we are at the forefront of research in automated task scheduling. We are also the first automated task scheduler
+                                to go commercial. We are continuously improving, and we need your help in doing that. You can help us by allowing us
+                                to help you organize your day. Together, we become partners in an endeavour like never before.
+                            </p>
+                            <p class="lead">
+                                <a href="#" class="btn btn-lg btn-success">Join us Now</a>
+                                <a href="#" class="btn btn-lg btn-info">Learn More</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="row col-lg-offset-3 col-lg-6">
-                <h4>Tired Planning your Day?</h4>
-                <h3>Let us help you.</h3>
-                <p class="text-justify">
-                    We are Reverie, the world's pioneering automated personal task scheduler. We are the experts in our field
-                    and we are at the forefront of research in automated task scheduling. We are also the first automated task scheduler
-                    to go commercial. We are continuously improving, and we need your help in doing that. You can help us by allowing us
-                    to help you organize your day. Together, we become partners in an endeavour like never before. join us now.
-                </p>
-            </div>
-            <script>
-                $(document).ready(
-                        function(){
-                            $('.slider').ClassySlider(
-                                    {
-                                        autoplay: true,
-                                        pause: true,
-                                        duration: 3000,
-                                        distance: 40
-                                    }
-                            );
-                        }
-                );
-            </script>
         </g:else>
     </div>
 </body>

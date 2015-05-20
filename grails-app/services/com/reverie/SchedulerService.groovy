@@ -9,6 +9,7 @@ import org.joda.time.Duration
 class SchedulerService {
     def utilityService
     def reDraw(LocalDateTime datePointer, User owner){
+        println("DATE PINT: " + datePointer.toString())
         Random random = new Random()
         int i=0, j=0
         int index = 0
