@@ -260,7 +260,7 @@ class UtilityService {
                 if(tempPointer.equals(subTasks[j].subTaskStart)){
                     //i+=duration
                     isFree = false
-                    int dur = new Duration(datePointer.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
+                    int dur = new Duration(datePointer.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
                     println("DUR " + dur)
                     i+= dur
                     break
