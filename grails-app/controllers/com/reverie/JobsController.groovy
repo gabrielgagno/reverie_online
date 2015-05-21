@@ -50,7 +50,7 @@ class JobsController {
                 flash.message = "Deadline is too close. Please adjust some of your other tasks or habits."
             }
             else{
-                println("PUMASOK BA DIT PUTANG INA")
+
                 utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
                 utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
                 schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))

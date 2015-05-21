@@ -248,9 +248,10 @@ class UtilityService {
         for(SubTask st : subTasks){
             println(st.subTaskStart)
         }
+        int counter = 0
         ArrayList<LocalDateTime> arrayList = new ArrayList<LocalDateTime>()
-        for(int i=0;i<timeBeforeDeadline;i++){
-            def tempPointer = datePointer.plusHours(i)
+        for(int i=0;i<timeBeforeDeadline*2;i++){
+            def tempPointer = datePointer.plusMinutes(i*30)
             boolean isFree = true
             int j=0
             for(j=0;j<subTasks.length;j++){
@@ -260,14 +261,22 @@ class UtilityService {
                 if(tempPointer.equals(subTasks[j].subTaskStart)){
                     //i+=duration
                     isFree = false
-                    int dur = new Duration(datePointer.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC)).getStandardHours()-1
+                    float ceil = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardMinutes()/30
+                    int dur = ceil-1
                     println("DUR " + dur)
                     i+= dur
+                    counter = 0
                     break
                 }
             }
             if(isFree){
-                arrayList.add(tempPointer)
+                if(counter == 1){
+                    arrayList.add(tempPointer.minusMinutes(30))
+                    counter = 0
+                }
+                else{
+                    counter++
+                }
             }
         }
         for(LocalDateTime ldt : arrayList){
