@@ -65,7 +65,7 @@
                                 j("#duration").html("Frequency: " + calEvent.freq);
                             }
                             j('#modalBody').html(calEvent.description);
-                            var x = j('#modalGuy').attr("href")
+                            var x = j('#modalGuy').attr("href");
                             j('#modalGuy').attr("href", x + "/" + calEvent.id);
                             j('#fullCalModal').modal('show');
                         },

@@ -285,4 +285,94 @@ class UtilityService {
         }
         return arrayList
     }
+
+    def habitConflictCheck(User owner, String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
+        //create habits and subhabits but don't persist yet
+        Habit habit
+        if (!id.equals(null)) {
+            habit = Habit.findById(id)
+        } else {
+            habit = new Habit()
+        }
+        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
+        DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
+        LocalDate rs = dateFmt.parseLocalDate(rangeStart)
+        LocalDate re = dateFmt.parseLocalDate(rangeEnd)
+        LocalTime sh = timeFmt.parseLocalTime(startHour)
+        LocalTime eh = timeFmt.parseLocalTime(endHour)
+
+        habit.jobName = jobName
+        habit.jobNotes = jobNotes
+        habit.owner = owner
+        habit.rangeStart = rs
+        habit.rangeEnd = re
+        habit.start = sh
+        habit.end = eh
+        habit.frequency = frequency
+        LocalDate tempStart = rs
+        def tempList = []
+        int minutes
+        println(eh.toString())
+        println(eh.plusMinutes(1440).toString())
+        if (sh.isBefore(eh)) {
+            minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
+        } else {
+            minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
+        }
+        println(minutes)
+        while (!tempStart.isAfter(re)) {
+            SubTask t = new SubTask()
+            t.motherTask = habit
+            t.subTaskStart = tempStart.toLocalDateTime(sh)
+            t.subTaskEnd = tempStart.toLocalDateTime(sh).plusMinutes(minutes)
+            tempList << t
+            if (frequency.equals("ONCE")) {
+                break
+            } else if (frequency.equals("DAILY")) {
+                tempStart = tempStart.plusDays(1)
+            } else if (frequency.equals("WEEKLY")) {
+                tempStart = tempStart.plusWeeks(1)
+            } else if (frequency.equals("MONTHLY")) {
+                tempStart = tempStart.plusMonths(1)
+            } else if (frequency.equals("ANNUALLY")) {
+                tempStart = tempStart.plusYears(1)
+            }
+        }
+        //real algorithm
+        SubTask[] inputList = tempList
+        Task[] tasks = Task.findAllByOwner(owner)
+        for(Task t : tasks){
+            SubTask[] stList = SubTask.findAllByMotherTask(t)
+            for(SubTask st2 : stList){
+                for(SubTask st1 : inputList){
+                    if(overlapChecker(st1, st2)){
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
+    def overlapChecker(SubTask st1, SubTask st2){
+        if(st1.subTaskStart.compareTo(st2.subTaskStart)==0 || st1.subTaskEnd.compareTo(st2.subTaskEnd)==0){
+            return true
+        }
+        else if(st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskStart.isBefore(st2.subTaskEnd)){
+            return true
+        }
+        else if(st1.subTaskEnd.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)){
+            return true
+        }
+        else if(st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)){
+            return true
+        }
+        else if(st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)){
+            return true
+        }
+        else if(st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)){
+            return true
+        }
+        return false
+    }
 }
