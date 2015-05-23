@@ -70,17 +70,6 @@
                             j('#fullCalModal').modal('show');
                         },
                         events: [
-                            <g:each in="${tasks}">
-                                {
-                                    //deadlines
-                                    id: '${it.id}',
-                                    title: 'Deadline for ${it.jobName}',
-                                    description: '${it.jobNotes}',
-                                    eventDL: '${((com.reverie.Task) it).deadline}',
-                                    start: '${it.deadline}',
-                                    color: '#670D0D'
-                                },
-                            </g:each>
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
                                     tempId: '${it.id}',

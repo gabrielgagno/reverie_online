@@ -44,6 +44,9 @@ class UtilityService {
         h.jobNotes = jobNotes
         h.rangeStart = rs
         h.rangeEnd = re
+        if(re.isBefore(rs)){
+            return false
+        }
         h.start = sh
         h.end = eh
         h.frequency = frequency
@@ -89,6 +92,7 @@ class UtilityService {
                 tempStart = tempStart.plusYears(1)
             }
         }
+        return true
     }
 
     def addSubTask(Job motherTask, LocalDateTime subTaskStart, LocalDateTime subTaskEnd){
