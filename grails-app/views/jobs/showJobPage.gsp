@@ -37,7 +37,7 @@
             <p>${jobNotes}</p>
 
             <g:if test="${isHabit==0}">
-                <g:if test="${done==true}">
+                <g:if test="${done}">
                     <p class="btn btn-default"><i class="glyphicon glyphicon-check"></i> Done</p>
                 </g:if>
                 <g:else>

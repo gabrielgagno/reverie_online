@@ -11,7 +11,6 @@ class SchedulerService {
     def reDraw(LocalDateTime datePointer, User owner){
         println("DATE PINT: " + datePointer.toString())
         Random random = new Random()
-        int i=0, j=0
         int index = 0
         int complTime
         int timeBeforeDeadline
@@ -34,7 +33,6 @@ class SchedulerService {
         for(Task t : tasks){
             println(t.jobName)
         }
-        Habit[] habits = Habit.findAllByOwner(owner)
         //clear all subTasks of task
         if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
             def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
@@ -128,9 +126,5 @@ class SchedulerService {
         }
         println("FITSKY")
         return true
-    }
-
-    def fitToSchedule(SubTask subTask, LocalDateTime dateStart, int[] timeArray){
-        subTask.subTaskStart = dateStart
     }
 }

@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-lg-3" for deadline>Deadline: </label>
+        <label class="control-label col-lg-3">Deadline: </label>
         <div class="col-lg-9">
             <input id="datetimepicker" type="text" readOnly="readonly" required="required" name="deadline" />
         </div>
@@ -24,7 +24,7 @@
         <label class="control-label col-lg-4" for="completionTimeHour">Completion Time: </label>
         <div class="input-group">
             <g:field type="number" name="completionTimeHour" id="completionTimeHour" class="form-control input-md" min="1" placeholder="HH" required="required" value="${completionHr}"/>
-            <span class="input-group-btn" style="width:0px;"></span>
+            <span class="input-group-btn" style="width:0;"></span>
         </div>
     </div>
     <div class="form-group">
