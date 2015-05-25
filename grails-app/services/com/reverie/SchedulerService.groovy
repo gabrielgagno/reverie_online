@@ -67,10 +67,11 @@ class SchedulerService {
             }
             ArrayList<LocalDateTime> freeTimes = utilityService.findFreeTimes(timeBeforeDeadline, datePointer, subTasks)
             upperRandCeil = (complTime + freeTimes.size())/2
-            println("COMPLTIME: " + complTime + " TIMEBEFREDEAD: " + timeBeforeDeadline + " upperrand: " + upperRandCeil)
+            println("COMPLTIME: " + complTime + " TIMEBEFREDEAD: " + timeBeforeDeadline + "Freetimes: " + freeTimes.size() + " upperrand: " + upperRandCeil)
             while(completionArray.get(tasks[index].id)>0){
                 int x = random.nextInt((int) upperRandCeil)
                 println("CURR DATE POINTER: " + datePointer)
+                println("x" + x)
                 def randomizedDatePointer = freeTimes.get(x)
                 println("RAND DATE POINTER: " + randomizedDatePointer)
                 println("X: " + x)
@@ -126,5 +127,31 @@ class SchedulerService {
         }
         println("FITSKY")
         return true
+    }
+
+    def refresh(User owner){
+        def now = LocalDateTime.now()
+        Task[] taskList = Task.findAllByOwnerAndDone(owner, false)
+        def tempTList = []
+        for(Task t : taskList){
+            SubTask[] stList = SubTask.findAllByMotherTask(t)
+            def tempStList = []
+            for(SubTask st : stList){
+                if(now.isAfter(st.subTaskStart)){
+                    tempStList << st
+                    t.completionTime--
+                    t.save(failOnError: true)
+                    if(t.completionTime<=0){
+                        tempTList << t
+                    }
+                }
+            }
+            if(tempStList.size()>0){
+                SubTask.deleteAll(tempStList)
+            }
+            if(tempTList.size()>0){
+                Task.deleteAll(tempTList)
+            }
+        }
     }
 }

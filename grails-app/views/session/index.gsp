@@ -131,7 +131,7 @@
                                 to help you organize your day. Together, we become partners in an endeavour like never before.
                             </p>
                             <p class="lead">
-                                <a href="#" class="btn btn-lg btn-success">Join us Now</a>
+                                <g:link controller="session" action="signup" class="btn btn-lg btn-success">Join Us Now</g:link>
                                 <a href="#" class="btn btn-lg btn-info">Learn More</a>
                             </p>
                         </div>

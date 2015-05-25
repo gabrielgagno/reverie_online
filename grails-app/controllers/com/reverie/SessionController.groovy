@@ -14,6 +14,7 @@ class SessionController {
         if(session["id"]){
             sessionInd = 1
             User user = sessionService.getCurrentUser((String) session.getAttribute("id"))
+            schedulerService.refresh(user)
             tasks = sessionService.getUserTasks(user)
             habits = sessionService.getUserHabits(user)
             subTasks = sessionService.getUserSubTasks(user)

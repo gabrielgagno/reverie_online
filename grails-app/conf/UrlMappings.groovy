@@ -10,6 +10,7 @@ class UrlMappings {
         "/"(controller: "session", action: "index")
         "/profile"(controller: "session", action: "profile")
         "/settings"(controller: "session", action: "settings")
+        "/signup"(controller: "session", action: "signup")
         "/myjobs"(controller: "jobs", action: "jobsList")
         "/new/task"(controller: "jobs", action: "newTask")
         "/new/habit"(controller: "jobs", action: "newHabit")
