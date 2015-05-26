@@ -134,24 +134,32 @@ class SchedulerService {
         Task[] taskList = Task.findAllByOwnerAndDone(owner, false)
         def tempTList = []
         for(Task t : taskList){
+            println("TASK NAME: " + t.jobName + " " + t.id)
             SubTask[] stList = SubTask.findAllByMotherTask(t)
-            def tempStList = []
+            println("TLIST: " + taskList.length + " " + "STLIST: " + stList.length)
+            //def tempStList = []
             for(SubTask st : stList){
+                println(st.subTaskStart.toString())
                 if(now.isAfter(st.subTaskStart)){
-                    tempStList << st
+                    println("OO!")
+                    //tempStList << st
+                    st.delete(flush: true)
                     t.completionTime--
                     t.save(failOnError: true)
+                    println("MAY ERROR BA?")
                     if(t.completionTime<=0){
-                        tempTList << t
+                        //tempTList << t
+                        t.delete(flush: true)
                     }
                 }
             }
+            /*
             if(tempStList.size()>0){
                 SubTask.deleteAll(tempStList)
             }
             if(tempTList.size()>0){
                 Task.deleteAll(tempTList)
-            }
+            }*/
         }
     }
 }

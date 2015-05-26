@@ -49,6 +49,9 @@ class JobsController {
             if(freeTimes<completionTimeHour){
                 flash.message = "Deadline is too close. Please adjust some of your other tasks or habits."
             }
+            else if(dLine.isBefore(LocalDateTime.now())){
+                flash.message = "Invalid deadline."
+            }
             else{
 
                 utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
