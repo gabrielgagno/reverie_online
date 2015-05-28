@@ -16,7 +16,7 @@ class JobsController {
 
     def newTask(){
         if(session.getAttribute("id")) {
-            render(view: 'newTask', model: [id: "", isSession: 1, jobName: "", jobNotes: "", deadline: "", completionHr: 0, completionMin: 0])
+            render(view: 'newTask', model: [id: "", isSession: 1, jobName: "", jobNotes: "", deadline: "", completionHr: 1, completionMin: 0])
         }
         else{
             redirect(controller: 'session', action: 'index')
@@ -33,6 +33,7 @@ class JobsController {
     }
 
     def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         //deadline: YYYY/MM/DD HH:MM
         if(session.getAttribute("id")){
             def datePtr = utilityService.createDatePointer()
@@ -64,6 +65,7 @@ class JobsController {
     }
 
     def addHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             if(utilityService.habitConflictCheck(sessionService.getCurrentUser((String) session.getAttribute("id")), null, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)){
                 utilityService.addHabit(sessionService.getCurrentUser((String) session.getAttribute("id")), jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
@@ -80,6 +82,7 @@ class JobsController {
     }
 
     def jobsList(){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def tasks = Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
             def habits = Habit.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
@@ -103,6 +106,7 @@ class JobsController {
     }
 
     def doEditTask(String idContainer, String jobName, String jobNotes, String deadline, int completionTimeHour){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         //delete subtasks
         if(session.getAttribute("id")){
             def subTasks = SubTask.findAllByMotherTask(Task.findById(idContainer))
@@ -120,6 +124,7 @@ class JobsController {
     }
 
     def deleteTask(String id){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def task = Task.findById(id)
             def subtasks = SubTask.findAllByMotherTask(task)
@@ -136,6 +141,7 @@ class JobsController {
     }
 
     def editHabit(String id){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def habit = Habit.findById(id)
             println(habit.start.toString())
@@ -148,6 +154,7 @@ class JobsController {
     }
 
     def doEditHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def subTasks = SubTask.findAllByMotherTask(Habit.findById((String) params.id))
             SubTask.deleteAll(subTasks)
@@ -163,6 +170,7 @@ class JobsController {
     }
 
     def deleteHabit(String id){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def habit = Habit.findById(id)
             def subtasks = SubTask.findAllByMotherTask(habit)
@@ -179,6 +187,7 @@ class JobsController {
     }
 
     def showJobPage(String id){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             Job job = Job.findById(id)
             if(job instanceof Task){
@@ -200,6 +209,7 @@ class JobsController {
     }
 
     def markAsDone(String id){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def t = Task.findById(id)
             t.done = true
@@ -211,6 +221,7 @@ class JobsController {
     }
 
     def reShuffle(){
+        schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))

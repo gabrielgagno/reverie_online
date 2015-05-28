@@ -23,6 +23,13 @@ class SchedulerService {
             }
         }
         Task[] tasksTemp = Task.findAllByOwnerAndDone(owner, false, [sort: "weight"])
+        //test
+        println("WEIGHTS TEST")
+        for(Task t : tasksTemp){
+            println(t.jobName + " " + t.deadline.toString() + " " + t.completionTime + " " + t.weight)
+        }
+        println("WEIGHTS TEST END")
+        //end of test
         def list = []
         tasksTemp.each {
             if(it.deadline.isAfter(datePointer)){
@@ -30,9 +37,6 @@ class SchedulerService {
             }
         }
         Task[] tasks = list
-        for(Task t : tasks){
-            println(t.jobName)
-        }
         //clear all subTasks of task
         if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
             def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
