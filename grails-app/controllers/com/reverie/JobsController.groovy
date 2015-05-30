@@ -37,7 +37,6 @@ class JobsController {
         //deadline: YYYY/MM/DD HH:MM
         if(session.getAttribute("id")){
             def datePtr = utilityService.createDatePointer()
-            println(datePtr.toString())
             DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
             def dLine = fmt.parseLocalDateTime(deadline)
             if(dLine.isBefore(LocalDateTime.now())){
@@ -129,7 +128,6 @@ class JobsController {
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
             def habit = Habit.findById(id)
-            println(habit.start.toString())
             DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
             [id: habit.id, isSession: 1, jobName: habit.jobName, jobNotes: habit.jobNotes, rangeStart: habit.rangeStart.toString(), rangeEnd: habit.rangeEnd.toString(), start: timeFormatter.print(habit.start), end: timeFormatter.print(habit.end), frequency: habit.frequency]
         }

@@ -9,7 +9,6 @@ import org.joda.time.Duration
 class SchedulerService {
     def utilityService
     def reDraw(LocalDateTime datePointer, User owner){
-        println("DATE PINT: " + datePointer.toString())
         Random random = new Random()
         int index = 0
         int complTime
@@ -36,7 +35,6 @@ class SchedulerService {
         //initialize hashMaps
         for(Task t : taskList){
             completionArray.put(t.id, t.completionTime)
-            println("COMPLETION ARRAY ELEMENT: " + t.id + " " + t.completionTime)
         }
         float currDuration
         while(scheduled!=totalNum){
@@ -55,7 +53,6 @@ class SchedulerService {
             timeBeforeDeadline = new Duration(datePointer.toDateTime(DateTimeZone.UTC), taskList.get(0).deadline.toDateTime(DateTimeZone.UTC)).getStandardHours()
             SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
             ArrayList<LocalDateTime> freeTimes = utilityService.findFreeTimes(timeBeforeDeadline, datePointer, subTasks)
-            println("FREETIMES " + freeTimes.size() + " " + completionArray.get(taskList.get(0).id))
             if(freeTimes.size()<completionArray.get(taskList.get(0).id)){
                 if(freeTimes.size()!=0){
                     completionArray.put(taskList.get(0).id, (float) completionArray.get(taskList.get(0).id)-currDuration)
@@ -115,7 +112,6 @@ class SchedulerService {
             }
             if(completionArray.get(taskList.get(0).id)<=0){
                 scheduled++
-                println("SCHEDULED ONE! " + scheduled)
                 taskList.remove(0)
             }
             if(owner.completionTimeConstant>owner.deadlineConstant){
@@ -142,10 +138,6 @@ class SchedulerService {
     boolean fit(User owner, LocalDateTime tStart, int[] timeArray){
         def jobs = Job.findAllByOwner(owner)
         SubTask[] subTasks = SubTask.findAllByMotherTaskInList(jobs, [sort: "subTaskStart"])
-        println("SUBTASKS")
-        for(SubTask st : subTasks){
-            println(st.subTaskStart.toString() + " " + st.subTaskEnd.toString())
-        }
         int i
         for(i=0;i<subTasks.length;i++){
             if(tStart.compareTo(subTasks[i].subTaskStart)<=0){
@@ -153,15 +145,11 @@ class SchedulerService {
             }
         }
         def tEnd = tStart.plusHours(timeArray[0]).plusMinutes(timeArray[1])
-        println("TIME: " + tStart + " " + tEnd)
-        println("I: " + i)
         if(i<subTasks.length){
             if(tEnd.compareTo(subTasks[i].subTaskStart)>0){
-                println("HERE DIDNT FIT")
                 return false
             }
         }
-        println("FITSKY")
         return true
     }
 
@@ -170,19 +158,14 @@ class SchedulerService {
         Task[] taskList = Task.findAllByOwnerAndDone(owner, false)
         def tempTList = []
         for(Task t : taskList){
-            println("TASK NAME: " + t.jobName + " " + t.id)
             SubTask[] stList = SubTask.findAllByMotherTask(t)
-            println("TLIST: " + taskList.length + " " + "STLIST: " + stList.length)
             //def tempStList = []
             for(SubTask st : stList){
-                println(st.subTaskStart.toString())
                 if(now.isAfter(st.subTaskStart)){
-                    println("OO!")
                     //tempStList << st
                     st.delete(flush: true)
                     t.completionTime--
                     t.save(failOnError: true)
-                    println("MAY ERROR BA?")
                     if(t.completionTime<=0){
                         //tempTList << t
                         t.delete(flush: true)

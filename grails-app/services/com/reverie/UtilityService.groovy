@@ -1,17 +1,11 @@
 package com.reverie
 
 import grails.transaction.Transactional
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
-import org.joda.time.Duration
-import org.joda.time.Hours
-import org.joda.time.LocalDate
-import org.joda.time.LocalDateTime
-import org.joda.time.LocalTime
-import org.joda.time.Minutes
+import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
-import org.joda.time.tz.FixedDateTimeZone
+
+import java.awt.*
 
 @Transactional
 class UtilityService {
@@ -27,22 +21,20 @@ class UtilityService {
         t.save(failOnError: true)
     }
 
-    def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
+    def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
         LocalDate rs = dateFmt.parseLocalDate(rangeStart)
         LocalDate re = dateFmt.parseLocalDate(rangeEnd)
         LocalTime sh = timeFmt.parseLocalTime(startHour)
         LocalTime eh = timeFmt.parseLocalTime(endHour)
-        println(sh.toString())
-        println(eh.toString())
         Habit h = new Habit()
         h.owner = owner
         h.jobName = jobName
         h.jobNotes = jobNotes
         h.rangeStart = rs
         h.rangeEnd = re
-        if(re.isBefore(rs)){
+        if (re.isBefore(rs)) {
             return false
         }
         h.start = sh
@@ -52,102 +44,71 @@ class UtilityService {
         LocalDate tempStart = rs
         LocalTime tempSh = sh
         LocalTime tempEh = eh
-        /*
-        if(sh.getHourOfDay()>12){
-            println("SH")
-            tempSh = tempSh.minusHours(12)
-        }
-        println(tempSh.toString())
-        if(eh.getHourOfDay()>12){
-            println("EH")
-            tempEh = tempEh.minusHours(12)
-        }*/
         int minutes
-        println(eh.toString())
-        println(eh.plusMinutes(1440).toString())
-        if(sh.isBefore(eh)){
+        if (sh.isBefore(eh)) {
             minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
-        }
-        else{
+        } else {
             minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
-        println(minutes)
-        while(!tempStart.isAfter(re)){
+        while (!tempStart.isAfter(re)) {
             addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
-            if(frequency.equals("ONCE")){
+            if (frequency.equals("ONCE")) {
                 break
-            }
-            else if(frequency.equals("DAILY")){
+            } else if (frequency.equals("DAILY")) {
                 tempStart = tempStart.plusDays(1)
-            }
-            else if(frequency.equals("WEEKLY")){
+            } else if (frequency.equals("WEEKLY")) {
                 tempStart = tempStart.plusWeeks(1)
-            }
-            else if(frequency.equals("MONTHLY")){
+            } else if (frequency.equals("MONTHLY")) {
                 tempStart = tempStart.plusMonths(1)
-            }
-            else if(frequency.equals("ANNUALLY")){
+            } else if (frequency.equals("ANNUALLY")) {
                 tempStart = tempStart.plusYears(1)
             }
         }
         return true
     }
 
-    def addSubTask(Job motherTask, LocalDateTime subTaskStart, LocalDateTime subTaskEnd){
+    def addSubTask(Job motherTask, LocalDateTime subTaskStart, LocalDateTime subTaskEnd) {
         SubTask st = new SubTask()
         st.motherTask = motherTask
         st.subTaskStart = subTaskStart
         st.subTaskEnd = subTaskEnd
         st.save()
     }
-    /*
-    def computeWeights(tasks, int wx, int wy){
-        for(Task t : tasks){
-            def count = SubTask.countByMotherTask(t)
-            println("COUNT: " + count)
-            def arr = floatToHoursMins(t.completionTime)
-            def allMinutes = arr[1] + (arr[0]*60000)
-            t.weight = weight(wx, wy, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
-            //t.weight2 = weight(wy, wx, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
-            t.save(flush: true)
-        }
-    }*/
-    def computeWeights(tasks, int wx, int wy, User owner){
-        if(wy>wx){
-            for(Task t : tasks){
+
+    def computeWeights(tasks, int wx, int wy, User owner) {
+        if (wy > wx) {
+            for (Task t : tasks) {
                 def count = SubTask.countByMotherTask(t)
-                println("COUNT: " + count)
                 def arr = floatToHoursMins(t.completionTime)
-                def allMinutes = arr[1] + (arr[0]*60000)
-                t.weight = weight(wx, wy, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
+                def allMinutes = arr[1] + (arr[0] * 60000)
+                t.weight = weight(wx, wy, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count / t.completionTime)
                 //t.weight2 = weight(wy, wx, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
                 t.save(flush: true)
             }
-        }
-        else{
+        } else {
             ArrayList<Integer> freeList = new ArrayList<Integer>()
             def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
             SubTask.deleteAll(sts)
             SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
-            for(Task t : tasks){
+            for (Task t : tasks) {
                 freeList.add(findFreeTimes((int) new Duration(createDatePointer().toDateTime(DateTimeZone.UTC), t.deadline.toDateTime(DateTimeZone.UTC)).getStandardHours(), createDatePointer(), subTasks).size())
 
             }
             def taskListSize = freeList.size()
             ArrayList<Task> solution = new ArrayList<Task>()
-            for(int i=taskListSize;i>0;i--){
-                if(solution.size()>i){
+            for (int i = taskListSize; i > 0; i--) {
+                if (solution.size() > i) {
                     break
                 }
                 findnCr(tasks, freeList, taskListSize, i, solution)
             }
             def weightCtr = 0
-            for(Task t : solution){
+            for (Task t : solution) {
                 t.weight = weightCtr++
                 t.save(flush: true)
             }
-            for(Task t : tasks){
-                if(!solution.contains(t)){
+            for (Task t : tasks) {
+                if (!solution.contains(t)) {
                     t.weight = weightCtr++
                     t.save(flush: true)
                 }
@@ -155,86 +116,80 @@ class UtilityService {
         }
     }
 
-    private static double weight(int wx, int wy, long x, long y, float age){
-        if(wx>wy){
-            return (wx*(y/x))
-        }
-        else{
-            (wy*age)
+    private static double weight(int wx, int wy, long x, long y, float age) {
+        if (wx > wy) {
+            return (wx * (y / x))
+        } else {
+            (wy * age)
         }
         //return (wx*(1-(y/x))) + (wy*age)
     }
 
-    def createDatePointer(){
+    def createDatePointer() {
         //return LocalDateTime.now().plusHours(13).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //only for testing in PH purposes
-        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0) //real deal should be fixed
+        return LocalDateTime.now().plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
+        //real deal should be fixed
     }
 
-    def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart){
-        for(SubTask x : subHabitList){
-            if(tStart.dayOfWeek() == x.subTaskStart.dayOfWeek()){
+    def habitSameDay(SubTask[] subHabitList, LocalDateTime tStart) {
+        for (SubTask x : subHabitList) {
+            if (tStart.dayOfWeek() == x.subTaskStart.dayOfWeek()) {
                 return true;
             }
         }
         return false;
     }
 
-    def floatToHoursMins(float x){
+    def floatToHoursMins(float x) {
         int[] arr
         arr = new int[2]
-        float temp = x*60
-        arr[0] = (int) temp/60
-        arr[1] = (int) temp%60
-        println(arr[0])
-        println(arr[1])
+        float temp = x * 60
+        arr[0] = (int) temp / 60
+        arr[1] = (int) temp % 60
         return arr
     }
 
-    def findNextHabit(Habit[] habits, LocalDateTime datePointer){
+    def findNextHabit(Habit[] habits, LocalDateTime datePointer) {
         def query = SubTask.where {
             inList("motherTask", habits)
             order('subTaskEnd', 'asc')
         }
         SubTask[] subTasks = query.findAll()
-        for(SubTask st : subTasks){
-            if(st.subTaskEnd.isAfter(datePointer)){
+        for (SubTask st : subTasks) {
+            if (st.subTaskEnd.isAfter(datePointer)) {
                 return st.subTaskEnd
             }
         }
 
     }
 
-    def findResetIndex(HashMap<String, Float> completionList, Task[] taskList){
-        for(int i=0;i<taskList.size();i++){
-            if(completionList.get(taskList[i].id)>0){
+    def findResetIndex(HashMap<String, Float> completionList, Task[] taskList) {
+        for (int i = 0; i < taskList.size(); i++) {
+            if (completionList.get(taskList[i].id) > 0) {
                 return i
             }
         }
         return -1
     }
 
-    def findNextIndex(HashMap<String, Float> completionList, Task[] taskList, int index){
-        for(int i=index;i<taskList.size();i++){
-            if(completionList.get(taskList[i].id)>0){
+    def findNextIndex(HashMap<String, Float> completionList, Task[] taskList, int index) {
+        for (int i = index; i < taskList.size(); i++) {
+            if (completionList.get(taskList[i].id) > 0) {
                 return i
             }
         }
         return -1
     }
 
-    def getAllSubHabits(User subHabitOwner){
+    def getAllSubHabits(User subHabitOwner) {
         SubTask[] emptyArr
-        if(Habit.findAllByOwner(subHabitOwner).size()==0){
+        if (Habit.findAllByOwner(subHabitOwner).size() == 0) {
             return emptyArr
-        }
-        else {
+        } else {
             def query = SubTask.where {
                 inList("motherTask", Habit.findAllByOwner(subHabitOwner))
             }
             SubTask[] res = query.list(sort: "subTaskStart")
-            for (SubTask r : res) {
-                println(r.subTaskStart.toString())
-            }
             return res
         }
     }
@@ -246,7 +201,7 @@ class UtilityService {
         return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
     }
 
-    def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour){
+    def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
         def task = Task.findById(id)
         task.jobName = jobName
@@ -272,15 +227,11 @@ class UtilityService {
         habit.save(failOnError: true)
         LocalDate tempStart = habit.rangeStart
         int minutes
-        println(habit.end.toString())
-        println(habit.end.plusMinutes(1440).toString())
-        if(habit.start.isBefore(habit.end)){
+        if (habit.start.isBefore(habit.end)) {
             minutes = Math.abs(Minutes.minutesBetween(habit.end, habit.start).getMinutes())
-        }
-        else{
+        } else {
             minutes = Math.abs(Minutes.minutesBetween(habit.end.toDateTimeToday().toLocalDateTime().plusDays(1), habit.start.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
-        println(minutes)
         while (!tempStart.isAfter(habit.rangeEnd)) {
             addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))
             if (frequency.equals("ONCE")) {
@@ -297,44 +248,35 @@ class UtilityService {
         }
     }
 
-    def findFreeTimes(int timeBeforeDeadline, LocalDateTime datePointer, SubTask[] subTasks){
-        for(SubTask st : subTasks){
-            println(st.subTaskStart)
-        }
+    def findFreeTimes(int timeBeforeDeadline, LocalDateTime datePointer, SubTask[] subTasks) {
         int counter = 0
         ArrayList<LocalDateTime> arrayList = new ArrayList<LocalDateTime>()
-        for(int i=0;i<timeBeforeDeadline*2;i++){
-            def tempPointer = datePointer.plusMinutes(i*30)
+        for (int i = 0; i < timeBeforeDeadline * 2; i++) {
+            def tempPointer = datePointer.plusMinutes(i * 30)
             boolean isFree = true
-            int j=0
-            for(j=0;j<subTasks.length;j++){
-                if(subTasks[j].subTaskStart.isAfter(tempPointer)){
+            int j = 0
+            for (j = 0; j < subTasks.length; j++) {
+                if (subTasks[j].subTaskStart.isAfter(tempPointer)) {
                     break;
                 }
-                if(tempPointer.equals(subTasks[j].subTaskStart)){
+                if (tempPointer.equals(subTasks[j].subTaskStart)) {
                     //i+=duration
                     isFree = false
-                    float ceil = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardMinutes()/30
-                    int dur = ceil-1
-                    println("DUR " + dur)
-                    i+= dur
+                    float ceil = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardMinutes() / 30
+                    int dur = ceil - 1
+                    i += dur
                     counter = 0
                     break
                 }
             }
-            if(isFree){
-                if(counter == 1){
+            if (isFree) {
+                if (counter == 1) {
                     arrayList.add(tempPointer.minusMinutes(30))
                     counter = 0
-                }
-                else{
+                } else {
                     counter++
                 }
             }
-        }
-        for(LocalDateTime ldt : arrayList){
-            println("ITO")
-            println(ldt.toString())
         }
         return arrayList
     }
@@ -365,14 +307,11 @@ class UtilityService {
         LocalDate tempStart = rs
         def tempList = []
         int minutes
-        println(eh.toString())
-        println(eh.plusMinutes(1440).toString())
         if (sh.isBefore(eh)) {
             minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
         } else {
             minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
-        println(minutes)
         while (!tempStart.isAfter(re)) {
             SubTask t = new SubTask()
             t.motherTask = habit
@@ -394,11 +333,11 @@ class UtilityService {
         //real algorithm
         SubTask[] inputList = tempList
         Task[] tasks = Task.findAllByOwner(owner)
-        for(Task t : tasks){
+        for (Task t : tasks) {
             SubTask[] stList = SubTask.findAllByMotherTask(t)
-            for(SubTask st2 : stList){
-                for(SubTask st1 : inputList){
-                    if(overlapChecker(st1, st2)){
+            for (SubTask st2 : stList) {
+                for (SubTask st1 : inputList) {
+                    if (overlapChecker(st1, st2)) {
                         return false
                     }
                 }
@@ -407,23 +346,18 @@ class UtilityService {
         return true
     }
 
-    def overlapChecker(SubTask st1, SubTask st2){
-        if(st1.subTaskStart.compareTo(st2.subTaskStart)==0 || st1.subTaskEnd.compareTo(st2.subTaskEnd)==0){
+    def overlapChecker(SubTask st1, SubTask st2) {
+        if (st1.subTaskStart.compareTo(st2.subTaskStart) == 0 || st1.subTaskEnd.compareTo(st2.subTaskEnd) == 0) {
             return true
-        }
-        else if(st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskStart.isBefore(st2.subTaskEnd)){
+        } else if (st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskStart.isBefore(st2.subTaskEnd)) {
             return true
-        }
-        else if(st1.subTaskEnd.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)){
+        } else if (st1.subTaskEnd.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)) {
             return true
-        }
-        else if(st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)){
+        } else if (st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)) {
             return true
-        }
-        else if(st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)){
+        } else if (st1.subTaskStart.isAfter(st2.subTaskStart) && st1.subTaskEnd.isBefore(st2.subTaskEnd)) {
             return true
-        }
-        else if(st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)){
+        } else if (st1.subTaskStart.isBefore(st2.subTaskStart) && st1.subTaskEnd.isAfter(st2.subTaskEnd)) {
             return true
         }
         return false
@@ -442,14 +376,11 @@ class UtilityService {
             for (int i = 0; i < res.length; i++) {
                 tList.add(tasksList[res[i] - 1])
                 fList.add(freeList.get(res[i] - 1))
-                print((res[i] - 1) + " ")
             }
-            println()
-            def ctr = fitChecker(tList, fList, (n - solution.size()), (n-r))
-            println("CTR IN FINDCTR: " + ctr)
-            if(ctr<(n - solution.size())){
+            def ctr = fitChecker(tList, fList, (n - solution.size()), (n - r))
+            if (ctr < (n - solution.size())) {
                 solution.clear()
-                for(Task t : tList){
+                for (Task t : tList) {
                     solution.add(t)
                 }
             }
@@ -457,19 +388,17 @@ class UtilityService {
         }
     }
 
-    def fitChecker(ArrayList<Task> tList, ArrayList<Integer> fList, int x, int init){
+    def fitChecker(ArrayList<Task> tList, ArrayList<Integer> fList, int x, int init) {
         def ctr = init
         def saveVariable = 0
-        for(int i=0;i<tList.size();i++){
-            saveVariable+=tList.get(i).completionTime
-            print(saveVariable + "/" + fList.get(i))
-            if(saveVariable>fList.get(i)){
+        for (int i = 0; i < tList.size(); i++) {
+            saveVariable += tList.get(i).completionTime
+            if (saveVariable > fList.get(i)) {
                 tList.remove(i)
                 fList.remove(i)
                 i--
                 ctr++
-                if(ctr>x){
-                    print("BREAK")
+                if (ctr > x) {
                     break
                 }
             }
@@ -500,12 +429,34 @@ class UtilityService {
         return false;
     }
 
-    def colorRandomizer(){
-        String res = "#"
-        Random random = new Random()
-        for(int i=0;i<6;i++){
-            res = res + Integer.toHexString(random.nextInt(16))
+    def colorRandomizer() {
+        Color mix = new Color(100, 50, 0)
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+
+        // mix the color
+        if (mix != null) {
+            red = (red + mix.getRed()) / 2;
+            green = (green + mix.getGreen()) / 2;
+            blue = (blue + mix.getBlue()) / 2;
         }
+
+        Color color = new Color(red, green, blue);
+        String res = "#" + Integer.toHexString(color.getRGB()).substring(2)
+//        Random random = new Random()
+//        for(int i=0;i<6;i++){
+//            if(i==0){
+//                res = res + Integer.toHexString(random.nextInt(5)+7)
+//            }else if(i==2){
+//                res = res + Integer.toHexString(random.nextInt(6))
+//            }
+//            else{
+//                res = res + Integer.toHexString(random.nextInt(16))
+//            }
+//        }
         return res
     }
+
 }
