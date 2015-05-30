@@ -102,18 +102,69 @@ class UtilityService {
         st.subTaskEnd = subTaskEnd
         st.save()
     }
-
+    /*
     def computeWeights(tasks, int wx, int wy){
         for(Task t : tasks){
+            def count = SubTask.countByMotherTask(t)
+            println("COUNT: " + count)
             def arr = floatToHoursMins(t.completionTime)
             def allMinutes = arr[1] + (arr[0]*60000)
-            t.weight = weight(wx, wy, t.deadline.toDateTime().getMillis(), allMinutes)
-            t.save()
+            t.weight = weight(wx, wy, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
+            //t.weight2 = weight(wy, wx, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
+            t.save(flush: true)
+        }
+    }*/
+    def computeWeights(tasks, int wx, int wy, User owner){
+        if(wy>wx){
+            for(Task t : tasks){
+                def count = SubTask.countByMotherTask(t)
+                println("COUNT: " + count)
+                def arr = floatToHoursMins(t.completionTime)
+                def allMinutes = arr[1] + (arr[0]*60000)
+                t.weight = weight(wx, wy, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
+                //t.weight2 = weight(wy, wx, new Duration(DateTime.now().getMillis(), t.deadline.toDateTime().getMillis()).getStandardMinutes(), arr[0], (float) count/t.completionTime)
+                t.save(flush: true)
+            }
+        }
+        else{
+            ArrayList<Integer> freeList = new ArrayList<Integer>()
+            def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
+            SubTask.deleteAll(sts)
+            SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
+            for(Task t : tasks){
+                freeList.add(findFreeTimes((int) new Duration(createDatePointer().toDateTime(DateTimeZone.UTC), t.deadline.toDateTime(DateTimeZone.UTC)).getStandardHours(), createDatePointer(), subTasks).size())
+
+            }
+            def taskListSize = freeList.size()
+            ArrayList<Task> solution = new ArrayList<Task>()
+            for(int i=taskListSize;i>0;i--){
+                if(solution.size()>i){
+                    break
+                }
+                findnCr(tasks, freeList, taskListSize, i, solution)
+            }
+            def weightCtr = 0
+            for(Task t : solution){
+                t.weight = weightCtr++
+                t.save(flush: true)
+            }
+            for(Task t : tasks){
+                if(!solution.contains(t)){
+                    t.weight = weightCtr++
+                    t.save(flush: true)
+                }
+            }
         }
     }
 
-    private static double weight(int wx, int wy, long x, long y){
-        return (2*wx*x) + (wy*y)
+    private static double weight(int wx, int wy, long x, long y, float age){
+        if(wx>wy){
+            return (wx*(y/x))
+        }
+        else{
+            (wy*age)
+        }
+        //return (wx*(1-(y/x))) + (wy*age)
     }
 
     def createDatePointer(){
@@ -378,5 +429,76 @@ class UtilityService {
             return true
         }
         return false
+    }
+
+    def findnCr(tasks, ArrayList<Integer> freeList, int n, int r, ArrayList<Task> solution) {
+        Task[] tasksList = tasks
+        int[] res = new int[r]
+        for (int i = 0; i < res.length; i++) {
+            res[i] = i + 1
+        }
+        boolean done = false;
+        while (!done) {
+            ArrayList<Task> tList = new ArrayList<Task>()
+            ArrayList<Integer> fList = new ArrayList<Integer>()
+            for (int i = 0; i < res.length; i++) {
+                tList.add(tasksList[res[i] - 1])
+                fList.add(freeList.get(res[i] - 1))
+                print((res[i] - 1) + " ")
+            }
+            println()
+            def ctr = fitChecker(tList, fList, (n - solution.size()), (n-r))
+            println("CTR IN FINDCTR: " + ctr)
+            if(ctr<(n - solution.size())){
+                solution.clear()
+                for(Task t : tList){
+                    solution.add(t)
+                }
+            }
+            done = getNext(res, n, r)
+        }
+    }
+
+    def fitChecker(ArrayList<Task> tList, ArrayList<Integer> fList, int x, int init){
+        def ctr = init
+        def saveVariable = 0
+        for(int i=0;i<tList.size();i++){
+            saveVariable+=tList.get(i).completionTime
+            print(saveVariable + "/" + fList.get(i))
+            if(saveVariable>fList.get(i)){
+                tList.remove(i)
+                fList.remove(i)
+                i--
+                ctr++
+                if(ctr>x){
+                    print("BREAK")
+                    break
+                }
+            }
+        }
+        return ctr
+
+    }
+
+    boolean getNext(int[] num, int n, int r) {
+        int target = r - 1
+        num[target]++
+        if (num[target] > ((n - (r - target)) + 1)) {
+            // Carry the One
+            while (num[target] > ((n - (r - target)))) {
+                target--
+                if (target < 0) {
+                    break
+                }
+            }
+            if (target < 0) {
+                return true
+            }
+            num[target]++
+            for (int i = target + 1; i < num.length; i++) {
+                num[i] = num[i - 1] + 1
+            }
+        }
+        return false;
     }
 }

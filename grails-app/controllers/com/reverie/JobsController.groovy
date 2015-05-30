@@ -40,23 +40,13 @@ class JobsController {
             println(datePtr.toString())
             DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
             def dLine = fmt.parseLocalDateTime(deadline)
-            def timeBeforeDeadline = new Duration(datePtr.toDateTime(DateTimeZone.UTC), dLine.toDateTime(DateTimeZone.UTC)).getStandardHours()
-            SubTask[] x = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), [sort: "subTaskStart"])
-            def arr = utilityService.findFreeTimes((int) timeBeforeDeadline, datePtr, x)
-            int freeTimes = arr.size()
-            println(timeBeforeDeadline)
-            println(completionTimeHour)
-            println("FREETIMES IN JOBSCONTROOLER: " + freeTimes)
-            if(freeTimes<completionTimeHour){
-                flash.message = "Deadline is too close. Please adjust some of your other tasks or habits."
-            }
-            else if(dLine.isBefore(LocalDateTime.now())){
+            if(dLine.isBefore(LocalDateTime.now())){
                 flash.message = "Invalid deadline."
             }
             else{
 
                 utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
-                utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+                utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
                 schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             }
             //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
@@ -69,8 +59,8 @@ class JobsController {
         if(session.getAttribute("id")){
             if(utilityService.habitConflictCheck(sessionService.getCurrentUser((String) session.getAttribute("id")), null, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)){
                 utilityService.addHabit(sessionService.getCurrentUser((String) session.getAttribute("id")), jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
-                if(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))).size()>0) {
-                    utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+                if(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))).size()>0) {
+                    utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
                     schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
                 }
             }
@@ -84,7 +74,7 @@ class JobsController {
     def jobsList(){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
-            def tasks = Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
+            def tasks = sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id")))
             def habits = Habit.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id")))
             render(view: 'jobsList', model:[isSession: 1, tasks: tasks, habits:habits])
         }
@@ -112,7 +102,7 @@ class JobsController {
             def subTasks = SubTask.findAllByMotherTask(Task.findById(idContainer))
             SubTask.deleteAll(subTasks)
             utilityService.editTask(idContainer, jobName, jobNotes, deadline, completionTimeHour)
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
             jobsList()
@@ -130,7 +120,7 @@ class JobsController {
             def subtasks = SubTask.findAllByMotherTask(task)
             SubTask.deleteAll(subtasks)
             task.delete()
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             jobsList()
         }
@@ -159,7 +149,7 @@ class JobsController {
             def subTasks = SubTask.findAllByMotherTask(Habit.findById((String) params.id))
             SubTask.deleteAll(subTasks)
             utilityService.editHabit((String) params.id, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             jobsList()
         }
@@ -176,7 +166,7 @@ class JobsController {
             def subtasks = SubTask.findAllByMotherTask(habit)
             SubTask.deleteAll(subtasks)
             habit.delete()
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             jobsList()
         }
@@ -214,7 +204,7 @@ class JobsController {
             def t = Task.findById(id)
             t.done = true
             t.save(failOnError: true)
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         }
         redirect(controller: 'session', action: 'index')
@@ -223,7 +213,7 @@ class JobsController {
     def reShuffle(){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
-            utilityService.computeWeights(Task.findAllByOwner(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"))
+            utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
         }
         redirect(controller: 'session', action: 'index')

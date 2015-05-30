@@ -22,88 +22,120 @@ class SchedulerService {
                 datePointer = sTemp.subTaskEnd
             }
         }
-        Task[] tasksTemp = Task.findAllByOwnerAndDone(owner, false, [sort: "weight"])
-        //test
-        println("WEIGHTS TEST")
-        for(Task t : tasksTemp){
-            println(t.jobName + " " + t.deadline.toString() + " " + t.completionTime + " " + t.weight)
-        }
-        println("WEIGHTS TEST END")
-        //end of test
-        def list = []
-        tasksTemp.each {
-            if(it.deadline.isAfter(datePointer)){
-                list << it
-            }
-        }
-        Task[] tasks = list
+        ArrayList<Task> taskList = Task.findAllByOwner(owner, [sort: "weight"])
+        def o = owner
+
         //clear all subTasks of task
         if(Task.findAllByOwnerAndDone(owner, false).size()!=0) {
             def sts = SubTask.findAllByMotherTaskInList(Task.findAllByOwnerAndDone(owner, false))
             SubTask.deleteAll(sts)
         }
         int scheduled = 0
-        int totalNum = tasks.length
+        int totalNum = taskList.size()
         HashMap<String, Float> completionArray = new HashMap<String, Float>()
         //initialize hashMaps
-        for(Task t : tasks){
+        for(Task t : taskList){
             completionArray.put(t.id, t.completionTime)
             println("COMPLETION ARRAY ELEMENT: " + t.id + " " + t.completionTime)
         }
         float currDuration
         while(scheduled!=totalNum){
             int[] timeArray
-            if(completionArray.get(tasks[index].id)<1){
+            if(completionArray.get(taskList.get(0).id)<1){
                 // time remaining in completionArray is <1
-                currDuration = completionArray.get(tasks[index].id)
-                timeArray = utilityService.floatToHoursMins(completionArray.get(tasks[index].id))
+                currDuration = completionArray.get(taskList.get(0).id)
+                timeArray = utilityService.floatToHoursMins(completionArray.get(taskList.get(0).id))
             }
             else{
                 //opposite
                 currDuration = 1.0f
                 timeArray = utilityService.floatToHoursMins(1.0f)
             }
-            complTime = tasks[index].completionTime
-            timeBeforeDeadline = new Duration(datePointer.toDateTime(DateTimeZone.UTC), tasks[index].deadline.toDateTime(DateTimeZone.UTC)).getStandardHours()
+            complTime = completionArray.get(taskList.get(0).id)
+            timeBeforeDeadline = new Duration(datePointer.toDateTime(DateTimeZone.UTC), taskList.get(0).deadline.toDateTime(DateTimeZone.UTC)).getStandardHours()
             SubTask[] subTasks = SubTask.findAllByMotherTaskInList(Job.findAllByOwner(owner), [sort: "subTaskStart"])
-            for(SubTask st : subTasks){
-                println(st.motherTask.jobName)
-            }
             ArrayList<LocalDateTime> freeTimes = utilityService.findFreeTimes(timeBeforeDeadline, datePointer, subTasks)
-            upperRandCeil = (complTime + freeTimes.size())/2
-            println("COMPLTIME: " + complTime + " TIMEBEFREDEAD: " + timeBeforeDeadline + "Freetimes: " + freeTimes.size() + " upperrand: " + upperRandCeil)
-            while(completionArray.get(tasks[index].id)>0){
-                int x = random.nextInt((int) upperRandCeil)
-                println("CURR DATE POINTER: " + datePointer)
-                println("x" + x)
-                def randomizedDatePointer = freeTimes.get(x)
-                println("RAND DATE POINTER: " + randomizedDatePointer)
-                println("X: " + x)
-                if(fit(owner, randomizedDatePointer, timeArray)){
-                    completionArray.put(tasks[index].id, (float) completionArray.get(tasks[index].id)-currDuration)
+            println("FREETIMES " + freeTimes.size() + " " + completionArray.get(taskList.get(0).id))
+            if(freeTimes.size()<completionArray.get(taskList.get(0).id)){
+                if(freeTimes.size()!=0){
+                    completionArray.put(taskList.get(0).id, (float) completionArray.get(taskList.get(0).id)-currDuration)
                     SubTask st = new SubTask()
-                    st.motherTask = tasks[index]
-                    st.subTaskStart = randomizedDatePointer
-                    st.subTaskEnd = randomizedDatePointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
+                    st.motherTask = taskList.get(0)
+                    st.subTaskStart = freeTimes.get(0)
+                    st.subTaskEnd = freeTimes.get(0).plusHours(timeArray[0]).plusMinutes(timeArray[1])
                     st.save(failOnError: true)
-                    if(completionArray.get(tasks[index].id)<=0){
-                        scheduled++
+                }
+                else{
+                    int counter = 0
+                    for(int i=0; ;i++){
+                        def tempPointer = datePointer.plusMinutes(i*30)
+                        boolean isFree = true
+                        int j=0
+                        for(j=0;j<subTasks.length;j++){
+                            if(subTasks[j].subTaskStart.isAfter(tempPointer)){
+                                break;
+                            }
+                            if(tempPointer.equals(subTasks[j].subTaskStart)){
+                                //i+=duration
+                                isFree = false
+                                float ceil = new Duration(subTasks[j].subTaskStart.toDateTime(DateTimeZone.UTC), subTasks[j].subTaskEnd.toDateTime(DateTimeZone.UTC)).getStandardMinutes()/30
+                                int dur = ceil-1
+                                i+= dur
+                                counter = 0
+                                break
+                            }
+                        }
+                        if(isFree){
+                            if(counter == 1){
+                                completionArray.put(taskList.get(0).id, (float) completionArray.get(taskList.get(0).id)-currDuration)
+                                SubTask st = new SubTask()
+                                st.motherTask = taskList.get(0)
+                                st.subTaskStart = tempPointer.minusMinutes(30)
+                                st.subTaskEnd = tempPointer.minusMinutes(30).plusHours(timeArray[0]).plusMinutes(timeArray[1])
+                                st.save(failOnError: true)
+                                break
+                            }
+                            else{
+                                counter++
+                            }
+                        }
                     }
                 }
             }
-            index = utilityService.findResetIndex(completionArray, tasks)
-            /*
-            if(fit(owner, randomizedDatePointer, timeArray)){
-
-            }
             else{
-                if(index == tasks.length){
-
-                }
-                else{
-
+                upperRandCeil = (complTime + freeTimes.size())/2
+                int x = random.nextInt((int) upperRandCeil)
+                def randomizedPointer = freeTimes.get(x)
+                completionArray.put(taskList.get(0).id, (float) completionArray.get(taskList.get(0).id)-currDuration)
+                SubTask st = new SubTask()
+                st.motherTask = taskList.get(0)
+                st.subTaskStart = randomizedPointer
+                st.subTaskEnd = randomizedPointer.plusHours(timeArray[0]).plusMinutes(timeArray[1])
+                st.save(failOnError: true)
+            }
+            if(completionArray.get(taskList.get(0).id)<=0){
+                scheduled++
+                println("SCHEDULED ONE! " + scheduled)
+                taskList.remove(0)
+            }
+            if(owner.completionTimeConstant>owner.deadlineConstant){
+                utilityService.computeWeights(Task.findAllByOwner(owner), owner.deadlineConstant, owner.completionTimeConstant, owner)
+            }
+            def tempList = Task.findAllByOwner(owner, [sort: "weight"])
+            /*
+            def d = Task.createCriteria()
+            def tempList = d.list {
+                eq("owner", owner)
+                and{
+                    order('weight')
                 }
             }*/
+            taskList.clear()
+            for(Task t : tempList){
+                if(completionArray.get(t.id)>0){
+                    taskList.add(t)
+                }
+            }
         }
     }
 

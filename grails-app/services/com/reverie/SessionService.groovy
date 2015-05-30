@@ -14,6 +14,10 @@ class SessionService {
         return Task.findAllByOwner(user)
     }
 
+    def getTasksByDeeadline(User user){
+        return Task.findAllByOwner(user, [sort: "deadline"])
+    }
+
     def getUserHabits(User user){
         return Habit.findAllByOwner(user)
     }
