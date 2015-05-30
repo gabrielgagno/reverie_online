@@ -32,7 +32,7 @@ class SessionService {
         def query = SubTask.where {
             motherTask in list
         }
-        return query.findAll()
+        return SubTask.findAllByMotherTaskInList(list, [sort: "motherTask"])
     }
 
     def saveSettings(String id, String firstName, String lastName, String email, String password, int priority){

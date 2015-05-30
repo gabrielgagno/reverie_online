@@ -24,6 +24,7 @@
     <g:javascript src="moment.min.js" />
     <g:javascript src="fullcalendar.js" />
     <g:javascript src="jquery.classyslider.min.js" />
+    <g:javascript src="randomcolor.min.js" />
     <link rel="stylesheet" type="text/css" href="<g:resource dir="css" file="jquery.classyslider.min.css" />" />
 </head>
 
@@ -72,9 +73,10 @@
                         events: [
                             <g:each in="${subTasks}" status="i" var="it">
                                 {
+
                                     tempId: '${it.id}',
                                     <g:if test="${it.motherTask instanceof com.reverie.Task}" >
-                                    color: '#670D0D',
+                                    color: '${((com.reverie.Task) it.motherTask).taskColor}',
                                     eventType: 'Task',
                                     dur: '${((com.reverie.Task) it.motherTask).completionTime}',
                                     eventDL: '${((com.reverie.Task) it.motherTask).deadline}',

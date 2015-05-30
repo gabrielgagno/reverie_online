@@ -12,7 +12,7 @@ class Task extends Job{
     //LocalTime minOpDurationLocalTime
     boolean hardDeadline
     boolean done
-
+    String taskColor
     static hasMany = [subTaskList : SubTask]
     static constraints = {
     }

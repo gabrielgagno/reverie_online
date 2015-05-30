@@ -23,9 +23,7 @@ class UtilityService {
         t.jobNotes = jobNotes
         t.deadline = fmt.parseLocalDateTime(deadline)
         t.completionTime = completionTimeHour
-        //t.completionLocalTime = completionLocalTime
-        //t.minOperationDuration = minOperationDurationHour
-        //t.minOpDurationLocalTime = minOpDurationLocalTime
+        t.taskColor = colorRandomizer()
         t.save(failOnError: true)
     }
 
@@ -500,5 +498,14 @@ class UtilityService {
             }
         }
         return false;
+    }
+
+    def colorRandomizer(){
+        String res = "#"
+        Random random = new Random()
+        for(int i=0;i<6;i++){
+            res = res + Integer.toHexString(random.nextInt(16))
+        }
+        return res
     }
 }
