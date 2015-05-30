@@ -57,15 +57,10 @@ class JobsController {
     def addHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
-            if(utilityService.habitConflictCheck(sessionService.getCurrentUser((String) session.getAttribute("id")), null, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)){
-                utilityService.addHabit(sessionService.getCurrentUser((String) session.getAttribute("id")), jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
-                if(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))).size()>0) {
-                    utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
-                    schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
-                }
-            }
-            else{
-                flash.message = "Cannot add habit. Task assigned here"
+            utilityService.addHabit(sessionService.getCurrentUser((String) session.getAttribute("id")), jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
+            if(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))).size()>0) {
+                utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
+                schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             }
         }
         redirect(controller: 'session', action: 'index')
