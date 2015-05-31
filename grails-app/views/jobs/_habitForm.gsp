@@ -77,10 +77,26 @@
             </select>
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-lg-offset-6">
-            <g:submitButton name="save" value="Save" class="btn btn-primary"/>
-            <g:link controller="session" action="index" class="btn btn-danger">Cancel</g:link>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label class="control-label col-lg-4">Weekly Frequency: </label>
+            <div class="form-group">
+                <g:checkBox name="wkFreq" value="1" id="sun" disabled="true" /><label for="sun" class="control-label">Sun</label>
+                <g:checkBox name="wkFreq" value="2" id="mon" disabled="true" /><label for="mon" class="control-label">Mon</label>
+                <g:checkBox name="wkFreq" value="3" id="tue" disabled="true" /><label for="tue" class="control-label">Tue</label>
+                <g:checkBox name="wkFreq" value="4" id="wed" disabled="true" /><label for="wed" class="control-label">Wed</label>
+                <g:checkBox name="wkFreq" value="5" id="thu" disabled="true" /><label for="thu" class="control-label">Thu</label>
+                <g:checkBox name="wkFreq" value="6" id="fri" disabled="true" /><label for="fri" class="control-label">Fri</label>
+                <g:checkBox name="wkFreq" value="7" id="sat" disabled="true" /><label for="sat" class="control-label">Sat</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-offset-6">
+                <g:submitButton name="save" value="Save" class="btn btn-primary"/>
+                <g:link controller="session" action="index" class="btn btn-danger">Cancel</g:link>
+            </div>
         </div>
     </div>
 </div>

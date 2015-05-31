@@ -49,4 +49,24 @@
                     }
             )
     );
+    j('#frequency').change(function(){
+        if($("#frequency option:selected").val()!="WEEKLY"){
+            $('#sun').attr("disabled", true);
+            $('#mon').attr("disabled", true);
+            $('#tue').attr("disabled", true);
+            $('#wed').attr("disabled", true);
+            $('#thu').attr("disabled", true);
+            $('#fri').attr("disabled", true);
+            $('#sat').attr("disabled", true);
+        }
+        else{
+            $("#sun").removeAttr("disabled");
+            $("#mon").removeAttr("disabled");
+            $("#tue").removeAttr("disabled");
+            $("#wed").removeAttr("disabled");
+            $("#thu").removeAttr("disabled");
+            $("#fri").removeAttr("disabled");
+            $("#sat").removeAttr("disabled");
+        }
+    });
 </script>

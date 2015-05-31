@@ -21,7 +21,7 @@ class UtilityService {
         t.save(failOnError: true)
     }
 
-    def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
+    def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency, wkFreq) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
         LocalDate rs = dateFmt.parseLocalDate(rangeStart)
@@ -34,6 +34,12 @@ class UtilityService {
         h.jobNotes = jobNotes
         h.rangeStart = rs
         h.rangeEnd = re
+        h.wkDays = new ArrayList<Integer>()
+        if(frequency.equals("WEEKLY")){
+            for(String x : wkFreq){
+                h.wkDays.add(Integer.parseInt(x))
+            }
+        }
         if (re.isBefore(rs)) {
             return false
         }
@@ -42,6 +48,9 @@ class UtilityService {
         h.frequency = frequency
         h.save(failOnError: true)
         LocalDate tempStart = rs
+        if(frequency.equals("WEEKLY")){
+            tempStart = tempStart.withDayOfWeek(1)
+        }
         LocalTime tempSh = sh
         LocalTime tempEh = eh
         int minutes
@@ -51,13 +60,19 @@ class UtilityService {
             minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
         while (!tempStart.isAfter(re)) {
-            addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
+            if(!frequency.equals("WEEKLY")){
+                addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
+            }
             if (frequency.equals("ONCE")) {
                 break
             } else if (frequency.equals("DAILY")) {
                 tempStart = tempStart.plusDays(1)
             } else if (frequency.equals("WEEKLY")) {
-                tempStart = tempStart.plusWeeks(1)
+                for(int x : h.wkDays){
+                    tempStart = tempStart.withDayOfWeek(x)
+                    addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
+                }
+                tempStart = tempStart.plusWeeks(1).withDayOfWeek(1)
             } else if (frequency.equals("MONTHLY")) {
                 tempStart = tempStart.plusMonths(1)
             } else if (frequency.equals("ANNUALLY")) {

@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d629ac9a-bfb9-41d3-975f-acbd1613cfdc" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/com/reverie/UtilityService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/com/reverie/UtilityService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/session/index.gsp" afterPath="$PROJECT_DIR$/grails-app/views/session/index.gsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp" afterPath="$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/jobs/_habitJs.gsp" afterPath="$PROJECT_DIR$/grails-app/views/jobs/_habitJs.gsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="reverie_online.iws" />
@@ -45,7 +47,7 @@
       <file leaf-file-name="SchedulerService.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/services/com/reverie/SchedulerService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-21.862068">
+            <state vertical-scroll-proportion="0.0">
               <caret line="113" column="27" selection-start-line="113" selection-start-column="27" selection-end-line="113" selection-end-column="27" />
               <folding>
                 <element signature="e#21#60#0" expanded="true" />
@@ -64,15 +66,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UtilityService.groovy" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UtilityService.groovy" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/services/com/reverie/UtilityService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.5172415">
-              <caret line="484" column="29" selection-start-line="484" selection-start-column="29" selection-end-line="484" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.39617488">
+              <caret line="36" column="43" selection-start-line="36" selection-start-column="43" selection-end-line="36" selection-end-column="43" />
               <folding>
                 <element signature="e#21#60#0" expanded="true" />
                 <element signature="n#!!block;n#addSubTask#0;n#!!block;n#UtilityService#0" expanded="false" />
-                <element signature="n#!!block;n#weight#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#createDatePointer#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#habitSameDay#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#findNextHabit#0;n#!!block;n#UtilityService#0" expanded="false" />
@@ -80,9 +81,21 @@
                 <element signature="n#!!block;n#findNextIndex#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#overlapFinder#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#editTask#0;n#!!block;n#UtilityService#0" expanded="false" />
-                <element signature="n#!!block;n#overlapChecker#0;n#!!block;n#UtilityService#0" expanded="false" />
                 <element signature="n#!!block;n#getNext#0;n#!!block;n#UtilityService#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Habit.groovy" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy">
+          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.2692308">
+              <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -90,7 +103,7 @@
       <file leaf-file-name="index.gsp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/session/index.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2307693">
+            <state vertical-scroll-proportion="0.0">
               <caret line="35" column="42" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
               <folding />
             </state>
@@ -100,18 +113,28 @@
       <file leaf-file-name="_habitForm.gsp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="71" column="44" selection-start-line="71" selection-start-column="44" selection-end-line="71" selection-end-column="44" />
+            <state vertical-scroll-proportion="-4.0408163">
+              <caret line="91" column="50" selection-start-line="91" selection-start-column="50" selection-end-line="91" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JobsController.groovy" pinned="false" current-in-tab="true">
+      <file leaf-file-name="_habitJs.gsp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/views/jobs/_habitJs.gsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-1.2653061">
+              <caret line="52" column="49" selection-start-line="52" selection-start-column="49" selection-end-line="52" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JobsController.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6443149">
-              <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="63" column="13" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -139,7 +162,6 @@
       <list>
         <option value="$PROJECT_DIR$/grails-app/views/layouts/clientBase.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/session/signup.gsp" />
-        <option value="$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/com/reverie/Job.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
@@ -163,6 +185,9 @@
         <option value="$PROJECT_DIR$/grails-app/services/com/reverie/SessionService.groovy" />
         <option value="$PROJECT_DIR$/grails-app/views/session/index.gsp" />
         <option value="$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/views/jobs/_habitJs.gsp" />
+        <option value="$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp" />
         <option value="$PROJECT_DIR$/grails-app/services/com/reverie/UtilityService.groovy" />
       </list>
     </option>
@@ -632,7 +657,8 @@
       <workItem from="1432830271755" duration="27702000" />
       <workItem from="1432979119044" duration="2338000" />
       <workItem from="1432988611176" duration="28155000" />
-      <workItem from="1433029564583" duration="5045000" />
+      <workItem from="1433029564583" duration="7990000" />
+      <workItem from="1433071519534" duration="14051000" />
     </task>
     <task id="LOCAL-00001" summary="added modals for event viewing">
       <created>1431367165763</created>
@@ -892,15 +918,21 @@
       <option name="project" value="LOCAL" />
       <updated>1433027553542</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="added warnings for overshot tasks">
+      <created>1433035189792</created>
+      <option name="number" value="00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1433035189792</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="324480000" />
+    <option name="totallyTimeSpent" value="341476000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -927,7 +959,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3267974" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24962178" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35620916" sideWeight="0.49092284" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35620916" sideWeight="0.49092284" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3251634" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -953,7 +985,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/reverie" />
     </ignored-roots>
-    <MESSAGE value="fixed overlapping issues" />
     <MESSAGE value="reconfigured datasource for openshift" />
     <MESSAGE value="final release v1.1.0.0" />
     <MESSAGE value="updated version" />
@@ -978,7 +1009,8 @@
     <MESSAGE value="allowed to add habit even if there is a task on the spot" />
     <MESSAGE value="new random task colors" />
     <MESSAGE value="removed unneccessary println and optimized imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed unneccessary println and optimized imports" />
+    <MESSAGE value="added warnings for overshot tasks" />
+    <option name="LAST_COMMIT_MESSAGE" value="added warnings for overshot tasks" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -991,16 +1023,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/Job.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy">
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
@@ -1245,17 +1267,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21656051">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/SubTask.groovy">
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
@@ -1263,7 +1274,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3789809">
           <caret line="7" column="41" selection-start-line="7" selection-start-column="41" selection-end-line="7" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1336,17 +1346,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="71" column="44" selection-start-line="71" selection-start-column="44" selection-end-line="71" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/session/index.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2307693">
+        <state vertical-scroll-proportion="0.0">
           <caret line="35" column="42" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
           <folding />
         </state>
@@ -1362,7 +1364,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/com/reverie/SchedulerService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-21.862068">
+        <state vertical-scroll-proportion="0.0">
           <caret line="113" column="27" selection-start-line="113" selection-start-column="27" selection-end-line="113" selection-end-column="27" />
           <folding>
             <element signature="e#21#60#0" expanded="true" />
@@ -1370,14 +1372,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/jobs/_habitJs.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.2653061">
+          <caret line="52" column="49" selection-start-line="52" selection-start-column="49" selection-end-line="52" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/com/reverie/Habit.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.2692308">
+          <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/jobs/_habitForm.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.0408163">
+          <caret line="91" column="50" selection-start-line="91" selection-start-column="50" selection-end-line="91" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="63" column="13" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/com/reverie/UtilityService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.5172415">
-          <caret line="484" column="29" selection-start-line="484" selection-start-column="29" selection-end-line="484" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.39617488">
+          <caret line="36" column="43" selection-start-line="36" selection-start-column="43" selection-end-line="36" selection-end-column="43" />
           <folding>
             <element signature="e#21#60#0" expanded="true" />
             <element signature="n#!!block;n#addSubTask#0;n#!!block;n#UtilityService#0" expanded="false" />
-            <element signature="n#!!block;n#weight#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#createDatePointer#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#habitSameDay#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#findNextHabit#0;n#!!block;n#UtilityService#0" expanded="false" />
@@ -1385,17 +1421,8 @@
             <element signature="n#!!block;n#findNextIndex#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#overlapFinder#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#editTask#0;n#!!block;n#UtilityService#0" expanded="false" />
-            <element signature="n#!!block;n#overlapChecker#0;n#!!block;n#UtilityService#0" expanded="false" />
             <element signature="n#!!block;n#getNext#0;n#!!block;n#UtilityService#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/com/reverie/JobsController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6443149">
-          <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>

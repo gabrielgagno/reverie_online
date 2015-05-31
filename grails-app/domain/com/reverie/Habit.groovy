@@ -9,6 +9,7 @@ class Habit extends Job{
     LocalTime start
     LocalTime end
     String frequency
+    ArrayList<Integer> wkDays
 
     static constraints = {
         frequency(inList: ['ONCE', 'DAILY', 'WEEKLY', 'MONTHLY', 'ANNUALLY'])
