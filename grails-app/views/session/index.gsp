@@ -33,6 +33,8 @@
         <g:if test="${isSession==1}">
             <div class="col-lg-12">
                 <p class="text-center alert-danger">
+                    <g:if test="${flash.header}">${flash.header}</g:if>
+                    <br />
                     <g:if test="${flash.message!=null}">${flash.message}</g:if>
                 </p>
             </div>

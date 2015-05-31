@@ -459,4 +459,31 @@ class UtilityService {
         return res
     }
 
+    def reporter(User owner){
+        String message = null
+        String smallMsg = ""
+        def ctr = 0
+        Task[] tasks = Task.findAllByOwner(owner)
+        for(Task t : tasks){
+            SubTask[] subTasks = SubTask.findAllByMotherTask(t, [sort: "subTaskStart"])
+            def stLength = subTasks.length
+            def stBeforeDeadline = 0
+            for(SubTask st : subTasks){
+                if(st.subTaskStart.isBefore(t.deadline)){
+                    stBeforeDeadline++
+                }
+                else{
+                    ctr++
+                    break
+                }
+            }
+            float percentage = (float) stBeforeDeadline/(float) t.completionTime
+            smallMsg = smallMsg + "\n" + t.jobName + " " + percentage + "% done"
+        }
+        message = "WARNING: " + ctr + " task/s overshot their deadline/s."
+        if(!smallMsg.equals("")){
+            message = message
+        }
+        [message, smallMsg]
+    }
 }

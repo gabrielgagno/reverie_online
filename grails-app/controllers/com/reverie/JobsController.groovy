@@ -43,10 +43,11 @@ class JobsController {
                 flash.message = "Invalid deadline."
             }
             else{
-
                 utilityService.addTask(sessionService.getCurrentUser((String) session.getAttribute("id")),jobName, jobNotes, deadline, completionTimeHour)
                 utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
                 schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+                flash.header = utilityService.reporter(sessionService.getCurrentUser((String) session.getAttribute("id")))[0]
+                flash.message = utilityService.reporter(sessionService.getCurrentUser((String) session.getAttribute("id")))[1]
             }
             //schedulerService.reDraw(new LocalDateTime(2015, 4, 27, 16, 0), sessionService.getCurrentUser((String) session.getAttribute("id"))) //testing
         }
