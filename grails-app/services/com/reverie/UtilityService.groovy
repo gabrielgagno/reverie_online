@@ -49,7 +49,8 @@ class UtilityService {
         h.save(failOnError: true)
         LocalDate tempStart = rs
         if(frequency.equals("WEEKLY")){
-            tempStart = tempStart.withDayOfWeek(1)
+            tempStart = tempStart.dayOfWeek().withMinimumValue().minusDays(1)
+            println("WEEKLY: " + tempStart)
         }
         LocalTime tempSh = sh
         LocalTime tempEh = eh
@@ -60,6 +61,7 @@ class UtilityService {
             minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
         while (!tempStart.isAfter(re)) {
+            println("ITO BA?")
             if(!frequency.equals("WEEKLY")){
                 addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
             }
@@ -69,10 +71,20 @@ class UtilityService {
                 tempStart = tempStart.plusDays(1)
             } else if (frequency.equals("WEEKLY")) {
                 for(int x : h.wkDays){
-                    tempStart = tempStart.withDayOfWeek(x)
-                    addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
+                    println("EH ITO?")
+                    if(x==7){
+                        //tempStart = tempStart.minusWeeks(1).withDayOfWeek(7)
+                        addSubTask(h, tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(sh), tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(sh).plusMinutes(minutes))
+                    }
+                    else{
+                        //tempStart = tempStart.withDayOfWeek(x)
+                        addSubTask(h, tempStart.withDayOfWeek(x).toLocalDateTime(sh), tempStart.withDayOfWeek(x).toLocalDateTime(sh).plusMinutes(minutes))
+                    }
+                    println(tempStart.toString())
+                    //addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
                 }
                 tempStart = tempStart.plusWeeks(1).withDayOfWeek(1)
+                println("FINALE: " + tempStart.toString())
             } else if (frequency.equals("MONTHLY")) {
                 tempStart = tempStart.plusMonths(1)
             } else if (frequency.equals("ANNUALLY")) {
@@ -228,7 +240,7 @@ class UtilityService {
         task.save(failOnError: true)
     }
 
-    def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
+    def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency, wkFreq) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
         def habit = Habit.findById(id)
@@ -239,8 +251,15 @@ class UtilityService {
         habit.start = timeFormatter.parseLocalTime(startHour)
         habit.end = timeFormatter.parseLocalTime(endHour)
         habit.frequency = frequency
+        habit.wkDays = new ArrayList<Integer>()
+        for(String x : wkFreq){
+            habit.wkDays.add(Integer.parseInt(x))
+        }
         habit.save(failOnError: true)
         LocalDate tempStart = habit.rangeStart
+        if(frequency.equals("WEEKLY")){
+            tempStart = tempStart.withDayOfWeek(1)
+        }
         int minutes
         if (habit.start.isBefore(habit.end)) {
             minutes = Math.abs(Minutes.minutesBetween(habit.end, habit.start).getMinutes())
@@ -248,13 +267,25 @@ class UtilityService {
             minutes = Math.abs(Minutes.minutesBetween(habit.end.toDateTimeToday().toLocalDateTime().plusDays(1), habit.start.toDateTimeToday().toLocalDateTime()).getMinutes())
         }
         while (!tempStart.isAfter(habit.rangeEnd)) {
-            addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))
+            if(!frequency.equals("WEEKLY")) {
+                addSubTask(habit, tempStart.toLocalDateTime(habit.start), tempStart.toLocalDateTime(habit.start).plusMinutes(minutes))
+            }
             if (frequency.equals("ONCE")) {
                 break
             } else if (frequency.equals("DAILY")) {
                 tempStart = tempStart.plusDays(1)
             } else if (frequency.equals("WEEKLY")) {
-                tempStart = tempStart.plusWeeks(1)
+                for(int x : habit.wkDays){
+                    if(x==7){
+                        //tempStart = tempStart.minusWeeks(1).withDayOfWeek(7)
+                        addSubTask(habit, tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(habit.start), tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(habit.start).plusMinutes(minutes))
+                    }
+                    else{
+                        //tempStart = tempStart.withDayOfWeek(x)
+                        addSubTask(habit, tempStart.withDayOfWeek(x).toLocalDateTime(habit.start), tempStart.withDayOfWeek(x).toLocalDateTime(habit.start).plusMinutes(minutes))
+                    }
+                }
+                tempStart = tempStart.plusWeeks(1).withDayOfWeek(1)
             } else if (frequency.equals("MONTHLY")) {
                 tempStart = tempStart.plusMonths(1)
             } else if (frequency.equals("ANNUALLY")) {

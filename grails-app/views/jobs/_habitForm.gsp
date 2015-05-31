@@ -83,13 +83,13 @@
         <div class="form-group">
             <label class="control-label col-lg-4">Weekly Frequency: </label>
             <div class="form-group">
-                <g:checkBox name="wkFreq" value="1" id="sun" disabled="true" /><label for="sun" class="control-label">Sun</label>
-                <g:checkBox name="wkFreq" value="2" id="mon" disabled="true" /><label for="mon" class="control-label">Mon</label>
-                <g:checkBox name="wkFreq" value="3" id="tue" disabled="true" /><label for="tue" class="control-label">Tue</label>
-                <g:checkBox name="wkFreq" value="4" id="wed" disabled="true" /><label for="wed" class="control-label">Wed</label>
-                <g:checkBox name="wkFreq" value="5" id="thu" disabled="true" /><label for="thu" class="control-label">Thu</label>
-                <g:checkBox name="wkFreq" value="6" id="fri" disabled="true" /><label for="fri" class="control-label">Fri</label>
-                <g:checkBox name="wkFreq" value="7" id="sat" disabled="true" /><label for="sat" class="control-label">Sat</label>
+                <g:checkBox name="wkFreq" value="7" id="sun" disabled="true" /><label for="sun" class="control-label">Sun</label>
+                <g:checkBox name="wkFreq" value="1" id="mon" disabled="true" /><label for="mon" class="control-label">Mon</label>
+                <g:checkBox name="wkFreq" value="2" id="tue" disabled="true" /><label for="tue" class="control-label">Tue</label>
+                <g:checkBox name="wkFreq" value="3" id="wed" disabled="true" /><label for="wed" class="control-label">Wed</label>
+                <g:checkBox name="wkFreq" value="4" id="thu" disabled="true" /><label for="thu" class="control-label">Thu</label>
+                <g:checkBox name="wkFreq" value="5" id="fri" disabled="true" /><label for="fri" class="control-label">Fri</label>
+                <g:checkBox name="wkFreq" value="6" id="sat" disabled="true" /><label for="sat" class="control-label">Sat</label>
             </div>
         </div>
         <div class="form-group">

@@ -142,7 +142,7 @@ class JobsController {
         if(session.getAttribute("id")){
             def subTasks = SubTask.findAllByMotherTask(Habit.findById((String) params.id))
             SubTask.deleteAll(subTasks)
-            utilityService.editHabit((String) params.id, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency)
+            utilityService.editHabit((String) params.id, jobName, jobNotes, rangeStart, rangeEnd, startHour, endHour, frequency, params.wkFreq)
             utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
             jobsList()
