@@ -209,6 +209,9 @@ class JobsController {
         if(session.getAttribute("id")){
             utilityService.computeWeights(sessionService.getTasksByDeeadline(sessionService.getCurrentUser((String) session.getAttribute("id"))), (int) session.getAttribute("deadlineConstant"), (int) session.getAttribute("completionConstant"), sessionService.getCurrentUser((String) session.getAttribute("id")))
             schedulerService.reDraw(utilityService.createDatePointer(), sessionService.getCurrentUser((String) session.getAttribute("id")))
+            def x = utilityService.reporter(sessionService.getCurrentUser((String) session.getAttribute("id")))
+            flash.header = x[0]
+            flash.message = x[1]
         }
         redirect(controller: 'session', action: 'index')
     }

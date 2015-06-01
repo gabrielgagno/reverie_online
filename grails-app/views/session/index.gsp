@@ -35,7 +35,7 @@
                 <p class="text-center alert-danger">
                     <g:if test="${flash.header}">${flash.header}</g:if>
                     <br />
-                    <g:if test="${flash.message!=null}">${flash.message}</g:if>
+                    <g:if test="${flash.message!=""}">${flash.message}</g:if>
                 </p>
             </div>
             <g:link controller="jobs" action="reShuffle" class="btn btn-success">Reshuffle</g:link>

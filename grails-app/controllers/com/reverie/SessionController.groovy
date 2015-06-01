@@ -19,6 +19,9 @@ class SessionController {
             habits = sessionService.getUserHabits(user)
             subTasks = sessionService.getUserSubTasks(user)
             subTaskSizeRedacted = subTasks.length - 1
+            def x = utilityService.reporter(sessionService.getCurrentUser((String) session.getAttribute("id")))
+            flash.header = x[0]
+            flash.message = x[1]
         }
         else{
             sessionInd = 0

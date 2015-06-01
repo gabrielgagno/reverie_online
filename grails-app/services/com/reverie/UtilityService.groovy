@@ -523,12 +523,13 @@ class UtilityService {
                     break
                 }
             }
-            float percentage = (float) stBeforeDeadline/(float) t.completionTime
-            smallMsg = smallMsg + "\n" + t.jobName + " " + percentage + "% done"
+            float percentage = (float) (stBeforeDeadline/(float) t.completionTime)*100
+            if(percentage!=100) {
+                smallMsg = smallMsg + "\n" + t.jobName + " " + percentage + "% done"
+            }
         }
-        message = "WARNING: " + ctr + " task/s overshot their deadline/s."
-        if(!smallMsg.equals("")){
-            message = message
+        if(ctr>0) {
+            message = "WARNING: " + ctr + " task/s overshot their deadline/s."
         }
         [message, smallMsg]
     }
