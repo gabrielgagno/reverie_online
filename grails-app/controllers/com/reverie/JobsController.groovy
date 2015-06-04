@@ -13,7 +13,10 @@ class JobsController {
     def sessionService
     def utilityService
     def schedulerService
-
+    /**
+     * renders the new task page
+     * @return
+     */
     def newTask(){
         if(session.getAttribute("id")) {
             render(view: 'newTask', model: [id: "", isSession: 1, jobName: "", jobNotes: "", deadline: "", completionHr: 1, completionMin: 0])
@@ -22,7 +25,10 @@ class JobsController {
             redirect(controller: 'session', action: 'index')
         }
     }
-
+    /**
+     * renders the newhabit page
+     * @return
+     */
     def newHabit(){
         if(session.getAttribute("id")) {
             render(view: 'newHabit', model: [isSession: 1])
@@ -31,7 +37,14 @@ class JobsController {
             redirect(controller: 'session', action: 'index')
         }
     }
-
+    /**
+     * action invoked for adding tasks
+     * @param jobName
+     * @param jobNotes
+     * @param deadline
+     * @param completionTimeHour
+     * @return
+     */
     def addTask(String jobName, String jobNotes, String deadline, int completionTimeHour){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         //deadline: YYYY/MM/DD HH:MM
@@ -53,7 +66,17 @@ class JobsController {
         }
         redirect(controller: 'session', action: 'index')
     }
-
+    /**
+     * action invoked for adding habits
+     * @param jobName
+     * @param jobNotes
+     * @param rangeStart
+     * @param rangeEnd
+     * @param startHour
+     * @param endHour
+     * @param frequency
+     * @return
+     */
     def addHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -65,7 +88,10 @@ class JobsController {
         }
         redirect(controller: 'session', action: 'index')
     }
-
+    /**
+     * action invoked for showing all tasks and habits
+     * @return
+     */
     def jobsList(){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -77,7 +103,11 @@ class JobsController {
             redirect(controller: 'session', action: 'index')
         }
     }
-
+    /**
+     * renders the edit task page
+     * @param id
+     * @return
+     */
     def editTask(String id){
         if(session.getAttribute("id")){
             def task = Task.findById(id)
@@ -89,7 +119,15 @@ class JobsController {
             redirect(controller: 'session', action: 'index')
         }
     }
-
+    /**
+     * invoked the editing of tasks
+     * @param idContainer
+     * @param jobName
+     * @param jobNotes
+     * @param deadline
+     * @param completionTimeHour
+     * @return
+     */
     def doEditTask(String idContainer, String jobName, String jobNotes, String deadline, int completionTimeHour){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         //delete subtasks
@@ -107,7 +145,11 @@ class JobsController {
         }
 
     }
-
+    /**
+     * action invoked for deleting tasks
+     * @param id
+     * @return
+     */
     def deleteTask(String id){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -124,7 +166,11 @@ class JobsController {
         }
 
     }
-
+    /**
+     * renders the editHabit page
+     * @param id
+     * @return
+     */
     def editHabit(String id){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -136,7 +182,17 @@ class JobsController {
             redirect(controller: 'session', action: 'index')
         }
     }
-
+    /**
+     * invoked the editing of habits
+     * @param jobName
+     * @param jobNotes
+     * @param rangeStart
+     * @param rangeEnd
+     * @param startHour
+     * @param endHour
+     * @param frequency
+     * @return
+     */
     def doEditHabit(String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -152,7 +208,11 @@ class JobsController {
         }
 
     }
-
+    /**
+     * invokes the deleting of habits
+     * @param id
+     * @return
+     */
     def deleteHabit(String id){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -169,7 +229,11 @@ class JobsController {
         }
 
     }
-
+    /**
+     * shows the page showing the details of one particular job
+     * @param id
+     * @return
+     */
     def showJobPage(String id){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -191,7 +255,11 @@ class JobsController {
         }
 
     }
-
+    /**
+     * marks as done the task then deletes the task
+     * @param id
+     * @return
+     */
     def markAsDone(String id){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){
@@ -203,7 +271,10 @@ class JobsController {
         }
         redirect(controller: 'session', action: 'index')
     }
-
+    /**
+     * reruns the redrawing algorithm to reshuffle tasks
+     * @return
+     */
     def reShuffle(){
         schedulerService.refresh(sessionService.getCurrentUser((String) session.getAttribute("id")))
         if(session.getAttribute("id")){

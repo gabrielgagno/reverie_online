@@ -9,6 +9,15 @@ import java.awt.*
 
 @Transactional
 class UtilityService {
+    /**
+     * Service method to add tasks
+     * @param owner
+     * @param jobName
+     * @param jobNotes
+     * @param deadline
+     * @param completionTimeHour
+     * @return
+     */
     def addTask(User owner, String jobName, String jobNotes, String deadline, float completionTimeHour) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
         def t = new Task()
@@ -20,7 +29,19 @@ class UtilityService {
         t.taskColor = colorRandomizer()
         t.save(failOnError: true)
     }
-
+    /**
+     * Service method to add habits
+     * @param owner
+     * @param jobName
+     * @param jobNotes
+     * @param rangeStart
+     * @param rangeEnd
+     * @param startHour
+     * @param endHour
+     * @param frequency
+     * @param wkFreq
+     * @return
+     */
     def addHabit(User owner, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency, wkFreq) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
@@ -73,15 +94,12 @@ class UtilityService {
                 for(int x : h.wkDays){
                     println("EH ITO?")
                     if(x==7){
-                        //tempStart = tempStart.minusWeeks(1).withDayOfWeek(7)
                         addSubTask(h, tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(sh), tempStart.minusWeeks(1).withDayOfWeek(7).toLocalDateTime(sh).plusMinutes(minutes))
                     }
                     else{
-                        //tempStart = tempStart.withDayOfWeek(x)
                         addSubTask(h, tempStart.withDayOfWeek(x).toLocalDateTime(sh), tempStart.withDayOfWeek(x).toLocalDateTime(sh).plusMinutes(minutes))
                     }
                     println(tempStart.toString())
-                    //addSubTask(h, tempStart.toLocalDateTime(sh), tempStart.toLocalDateTime(sh).plusMinutes(minutes))
                 }
                 tempStart = tempStart.plusWeeks(1).withDayOfWeek(1)
                 println("FINALE: " + tempStart.toString())
@@ -93,7 +111,13 @@ class UtilityService {
         }
         return true
     }
-
+    /**
+     * Persists subtasks to the database
+     * @param motherTask
+     * @param subTaskStart
+     * @param subTaskEnd
+     * @return
+     */
     def addSubTask(Job motherTask, LocalDateTime subTaskStart, LocalDateTime subTaskEnd) {
         SubTask st = new SubTask()
         st.motherTask = motherTask
@@ -101,7 +125,13 @@ class UtilityService {
         st.subTaskEnd = subTaskEnd
         st.save()
     }
-
+    /**
+     * computes weights for each task
+     * @param tasks
+     * @param wx
+     * @param wy
+     * @param owner
+     */
     def computeWeights(tasks, int wx, int wy, User owner) {
         if (wy > wx) {
             for (Task t : tasks) {
@@ -142,7 +172,15 @@ class UtilityService {
             }
         }
     }
-
+    /**
+     * the weight function itself used by the computeWeights function
+     * @param wx
+     * @param wy
+     * @param x
+     * @param y
+     * @param age
+     * @return
+     */
     private static double weight(int wx, int wy, long x, long y, float age) {
         if (wx > wy) {
             return (wx * (y / x))
@@ -166,7 +204,11 @@ class UtilityService {
         }
         return false;
     }
-
+    /**
+     * computes float valued hours into an array containing the hh:mm form othat float hour
+     * @param x
+     * @return
+     */
     def floatToHoursMins(float x) {
         int[] arr
         arr = new int[2]
@@ -176,38 +218,11 @@ class UtilityService {
         return arr
     }
 
-    def findNextHabit(Habit[] habits, LocalDateTime datePointer) {
-        def query = SubTask.where {
-            inList("motherTask", habits)
-            order('subTaskEnd', 'asc')
-        }
-        SubTask[] subTasks = query.findAll()
-        for (SubTask st : subTasks) {
-            if (st.subTaskEnd.isAfter(datePointer)) {
-                return st.subTaskEnd
-            }
-        }
-
-    }
-
-    def findResetIndex(HashMap<String, Float> completionList, Task[] taskList) {
-        for (int i = 0; i < taskList.size(); i++) {
-            if (completionList.get(taskList[i].id) > 0) {
-                return i
-            }
-        }
-        return -1
-    }
-
-    def findNextIndex(HashMap<String, Float> completionList, Task[] taskList, int index) {
-        for (int i = index; i < taskList.size(); i++) {
-            if (completionList.get(taskList[i].id) > 0) {
-                return i
-            }
-        }
-        return -1
-    }
-
+    /**
+     * fetches all subhabits
+     * @param subHabitOwner
+     * @return
+     */
     def getAllSubHabits(User subHabitOwner) {
         SubTask[] emptyArr
         if (Habit.findAllByOwner(subHabitOwner).size() == 0) {
@@ -220,14 +235,27 @@ class UtilityService {
             return res
         }
     }
-
+    /**
+     * finds for overlaps
+     * @param datePointer
+     * @param subTask
+     * @return
+     */
     def overlapFinder(LocalDateTime datePointer, SubTask subTask) {
         if (datePointer.compareTo(subTask.subTaskStart) == 0) {
             return true
         }
         return datePointer.isAfter(subTask.subTaskStart) && datePointer.isBefore(subTask.subTaskEnd)
     }
-
+    /**
+     * service for persisting edited tasks
+     * @param id
+     * @param jobName
+     * @param jobNotes
+     * @param deadline
+     * @param completionTimeHour
+     * @return
+     */
     def editTask(String id, String jobName, String jobNotes, String deadline, int completionTimeHour) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd HH:mm")
         def task = Task.findById(id)
@@ -239,7 +267,18 @@ class UtilityService {
         //task.minOpDurationLocalTime = minOpDurationLocalTime
         task.save(failOnError: true)
     }
-
+    /**
+     * service for persisting edited habits
+     * @param id
+     * @param jobName
+     * @param jobNotes
+     * @param rangeStart
+     * @param rangeEnd
+     * @param startHour
+     * @param endHour
+     * @param frequency
+     * @param wkFreq
+     */
     def editHabit(String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency, wkFreq) {
         DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm")
@@ -293,7 +332,13 @@ class UtilityService {
             }
         }
     }
-
+    /**
+     * finds free times of the task between deadline and datePointer
+     * @param timeBeforeDeadline
+     * @param datePointer
+     * @param subTasks
+     * @return
+     */
     def findFreeTimes(int timeBeforeDeadline, LocalDateTime datePointer, SubTask[] subTasks) {
         int counter = 0
         ArrayList<LocalDateTime> arrayList = new ArrayList<LocalDateTime>()
@@ -327,71 +372,12 @@ class UtilityService {
         return arrayList
     }
 
-    def habitConflictCheck(User owner, String id, String jobName, String jobNotes, String rangeStart, String rangeEnd, String startHour, String endHour, String frequency) {
-        //create habits and subhabits but don't persist yet
-        Habit habit
-        if (!id.equals(null)) {
-            habit = Habit.findById(id)
-        } else {
-            habit = new Habit()
-        }
-        DateTimeFormatter dateFmt = DateTimeFormat.forPattern("YYYY-MM-dd")
-        DateTimeFormatter timeFmt = DateTimeFormat.forPattern("HH:mm")
-        LocalDate rs = dateFmt.parseLocalDate(rangeStart)
-        LocalDate re = dateFmt.parseLocalDate(rangeEnd)
-        LocalTime sh = timeFmt.parseLocalTime(startHour)
-        LocalTime eh = timeFmt.parseLocalTime(endHour)
-
-        habit.jobName = jobName
-        habit.jobNotes = jobNotes
-        habit.owner = owner
-        habit.rangeStart = rs
-        habit.rangeEnd = re
-        habit.start = sh
-        habit.end = eh
-        habit.frequency = frequency
-        LocalDate tempStart = rs
-        def tempList = []
-        int minutes
-        if (sh.isBefore(eh)) {
-            minutes = Math.abs(Minutes.minutesBetween(eh, sh).getMinutes())
-        } else {
-            minutes = Math.abs(Minutes.minutesBetween(eh.toDateTimeToday().toLocalDateTime().plusDays(1), sh.toDateTimeToday().toLocalDateTime()).getMinutes())
-        }
-        while (!tempStart.isAfter(re)) {
-            SubTask t = new SubTask()
-            t.motherTask = habit
-            t.subTaskStart = tempStart.toLocalDateTime(sh)
-            t.subTaskEnd = tempStart.toLocalDateTime(sh).plusMinutes(minutes)
-            tempList << t
-            if (frequency.equals("ONCE")) {
-                break
-            } else if (frequency.equals("DAILY")) {
-                tempStart = tempStart.plusDays(1)
-            } else if (frequency.equals("WEEKLY")) {
-                tempStart = tempStart.plusWeeks(1)
-            } else if (frequency.equals("MONTHLY")) {
-                tempStart = tempStart.plusMonths(1)
-            } else if (frequency.equals("ANNUALLY")) {
-                tempStart = tempStart.plusYears(1)
-            }
-        }
-        //real algorithm
-        SubTask[] inputList = tempList
-        Task[] tasks = Task.findAllByOwner(owner)
-        for (Task t : tasks) {
-            SubTask[] stList = SubTask.findAllByMotherTask(t)
-            for (SubTask st2 : stList) {
-                for (SubTask st1 : inputList) {
-                    if (overlapChecker(st1, st2)) {
-                        return false
-                    }
-                }
-            }
-        }
-        return true
-    }
-
+    /**
+     * overlap checker for subtasks
+     * @param st1
+     * @param st2
+     * @return
+     */
     def overlapChecker(SubTask st1, SubTask st2) {
         if (st1.subTaskStart.compareTo(st2.subTaskStart) == 0 || st1.subTaskEnd.compareTo(st2.subTaskEnd) == 0) {
             return true
@@ -408,7 +394,14 @@ class UtilityService {
         }
         return false
     }
-
+    /**
+     * greedy algorithm for finding all combinations of tasks
+     * @param tasks
+     * @param freeList
+     * @param n
+     * @param r
+     * @param solution
+     */
     def findnCr(tasks, ArrayList<Integer> freeList, int n, int r, ArrayList<Task> solution) {
         Task[] tasksList = tasks
         int[] res = new int[r]
@@ -433,7 +426,14 @@ class UtilityService {
             done = getNext(res, n, r)
         }
     }
-
+    /**
+     * checks if each task is a good fit in the combination produced in findnCr
+     * @param tList
+     * @param fList
+     * @param x
+     * @param init
+     * @return
+     */
     def fitChecker(ArrayList<Task> tList, ArrayList<Integer> fList, int x, int init) {
         def ctr = init
         def saveVariable = 0
@@ -452,7 +452,13 @@ class UtilityService {
         return ctr
 
     }
-
+    /**
+     * produces the next combination for findnCr function
+     * @param num
+     * @param n
+     * @param r
+     * @return
+     */
     boolean getNext(int[] num, int n, int r) {
         int target = r - 1
         num[target]++
@@ -474,7 +480,10 @@ class UtilityService {
         }
         return false;
     }
-
+    /**
+     * method for randomizing colors in schedule
+     * @return
+     */
     def colorRandomizer() {
         Color mix = new Color(100, 50, 0)
         Random random = new Random();
@@ -504,7 +513,11 @@ class UtilityService {
 //        }
         return res
     }
-
+    /**
+     * reporter for late tasks
+     * @param owner
+     * @return
+     */
     def reporter(User owner){
         String message = null
         String smallMsg = ""

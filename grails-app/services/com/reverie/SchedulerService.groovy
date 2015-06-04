@@ -8,6 +8,11 @@ import org.joda.time.Duration
 @Transactional
 class SchedulerService {
     def utilityService
+    /**
+     * The main scheduling algorithm
+     * @param datePointer
+     * @param owner
+     */
     def reDraw(LocalDateTime datePointer, User owner){
         Random random = new Random()
         int index = 0
@@ -118,14 +123,6 @@ class SchedulerService {
                 utilityService.computeWeights(Task.findAllByOwner(owner), owner.deadlineConstant, owner.completionTimeConstant, owner)
             }
             def tempList = Task.findAllByOwner(owner, [sort: "weight"])
-            /*
-            def d = Task.createCriteria()
-            def tempList = d.list {
-                eq("owner", owner)
-                and{
-                    order('weight')
-                }
-            }*/
             taskList.clear()
             for(Task t : tempList){
                 if(completionArray.get(t.id)>0){
@@ -134,51 +131,25 @@ class SchedulerService {
             }
         }
     }
-
-    boolean fit(User owner, LocalDateTime tStart, int[] timeArray){
-        def jobs = Job.findAllByOwner(owner)
-        SubTask[] subTasks = SubTask.findAllByMotherTaskInList(jobs, [sort: "subTaskStart"])
-        int i
-        for(i=0;i<subTasks.length;i++){
-            if(tStart.compareTo(subTasks[i].subTaskStart)<=0){
-                break;
-            }
-        }
-        def tEnd = tStart.plusHours(timeArray[0]).plusMinutes(timeArray[1])
-        if(i<subTasks.length){
-            if(tEnd.compareTo(subTasks[i].subTaskStart)>0){
-                return false
-            }
-        }
-        return true
-    }
-
+    /**
+     * refreshes the tasks list and removes subtasks that are already done.
+     * @param owner
+     */
     def refresh(User owner){
         def now = LocalDateTime.now()
         Task[] taskList = Task.findAllByOwnerAndDone(owner, false)
-        def tempTList = []
         for(Task t : taskList){
             SubTask[] stList = SubTask.findAllByMotherTask(t)
-            //def tempStList = []
             for(SubTask st : stList){
                 if(now.isAfter(st.subTaskStart)){
-                    //tempStList << st
                     st.delete(flush: true)
                     t.completionTime--
                     t.save(failOnError: true)
                     if(t.completionTime<=0){
-                        //tempTList << t
                         t.delete(flush: true)
                     }
                 }
             }
-            /*
-            if(tempStList.size()>0){
-                SubTask.deleteAll(tempStList)
-            }
-            if(tempTList.size()>0){
-                Task.deleteAll(tempTList)
-            }*/
         }
     }
 }
